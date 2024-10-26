@@ -1,0 +1,57 @@
+<!-- Table 100 -->
+
+<table border=1>
+  %%[
+  SET @contador = 1
+  FOR @fila = 1 TO 10 DO
+  ]%%
+  <tr>
+    %%[
+    FOR @columna = 1 TO 10 DO
+    ]%%
+    <td>%%=v(@contador)=%%</td>
+    %%[
+    SET @contador = Add(@contador, 1)
+    NEXT @columna
+    ]%%
+  </tr>
+  %%[NEXT @fila]%%
+</table>
+
+<!--  -->
+
+<script runat="server">
+  Platform.Load("core", "1");
+
+  var json = {
+    "Flights": [
+      {
+        "Origin": "IND",
+        "Dest": "NYC",
+        "Price": 100.0
+      },
+      {
+        "Origin": "IND",
+        "Dest": "LAX",
+        "Price": 200.0
+      },
+      {
+        "Origin": "IND",
+        "Dest": "SEA",
+        "Price": 500.0,
+        "PerBagSurcharge": 25
+      }
+    ]
+  };
+
+  Write("<table border = 1><tr><th>Origin</th><th>Dest</th><th>Price</th><th>PerBagSurcharge</th></tr>");
+
+  for (var i = 0; i < json.Flights.length; i++) { // Correct loop condition with semicolon
+    var flight = json.Flights[i]; // Access current flight object
+    Write("<tr><td>" + flight.Origin + "</td><td>" + flight.Dest + "</td><td>" + flight.Price + "</td><td>" +((flight.PerBagSurcharge)? flight.PerBagSurcharge : "") + "</td></tr>");
+  }
+
+  Write("</table>");
+</script>
+
+<!--  -->

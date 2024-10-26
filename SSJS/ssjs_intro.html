@@ -1,0 +1,24 @@
+<script runat="server">
+
+    Platform.Load("core", "1.1");
+  
+    var dataRows = Platform.Function.LookupRows('Customers', 'EmailAddress', 'john.smith@mail.com');
+  
+    if (dataRows && dataRows.length > 0) {
+      for (var i = 0; i < dataRows.length; i++) {
+        var birthdayDE = DataExtension.Init("Customers");
+        var subscriberKey = dataRows[i]["SubscriberKey"];
+        var newAlphanumericID = GUID();  // Asegura que se genere un valor único para cada fila
+  
+        // Actualiza cada fila basada en su SubscriberKey, en lugar de EmailAddress
+        birthdayDE.Rows.Update(
+          {NewAlphanumericID: newAlphanumericID}, 
+          ["SubscriberKey"], 
+          [subscriberKey]
+        );
+  
+        Platform.Response.Write("Index: " + i + ", SubscriberKey: " + subscriberKey + ", NewAlphanumericID: " + newAlphanumericID + "<br>");
+      }
+    }
+  
+  </script>
