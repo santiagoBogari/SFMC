@@ -55,3 +55,26 @@
 </script>
 
 <!--  -->
+<!-- "pass variable from ampscript to ssjs" Variable.GetValue -->
+
+%%[
+SET @id = [ContactKey]
+SET @name = [name]
+
+
+]%%
+
+%%=v(@name)=%%
+
+
+<script runat=server>
+  Platform.Load("Core","1");
+
+    var id = Variable.GetValue("@id");
+    var name = Variable.GetValue("@name");
+    
+    Write(id + name)
+</script>
+
+
+<!--  -->
