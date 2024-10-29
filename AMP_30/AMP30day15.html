@@ -1,0 +1,36 @@
+%%[
+VAR @email, @fullName, @mileage, @services, @servicesCount
+
+SET @email = AttributeValue("Email")
+SET @fullname = Concat(AttributeValue("FirstName"), " ", AttributeValue("LastName"))
+SET @mileage = AttributeValue("Mileage")
+SET @services = LookupRows('Services', 'Mileage', @mileage) 
+SET @servicesCount = RowCount(@services)
+]%%
+
+Hi %%=v(@fullname)=%%,
+
+As we enjoy the remaining days of summer, its time to think about getting your vehicle ready for fall adventures and winter road trips. Now is a great time to check major components like tires, brakes and batteries to help give you confidence on the roads as the days get shorter and the weather begins to change.
+
+Here are recommended services:
+%%[
+IF @servicesCount > 0 THEN
+ FOR @counter = 1 to @servicesCount DO
+   VAR @service, @serviceName, @serviceDescription
+   SET @service = row(@services, @counter)
+   SET @serviceName = field(@service,'Name')
+   SET @serviceDescription = field(@service,'Description')
+]%%
+
+%%=v(@serviceName)=%% %%=v(@serviceDescription)=%%
+
+%%[ 
+NEXT @counter 
+ELSE RaiseError('no rows found', true)
+ENDIF 
+]%%
+
+Visit your nearby Next Auto dealer for all your vehicle needs.
+
+Best regards,
+Next Auto

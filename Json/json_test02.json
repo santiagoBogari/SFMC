@@ -1,0 +1,172 @@
+{
+    "values": [
+      {
+        "ContactKey": "1001",
+        "FirstName": "John",
+        "LastName": "Doe",
+        "LoyaltyTier": "Gold",
+        "LastVisitedDate": "2024-06-10",
+        "InterestedProperty": "MGM Grand",
+        "LastBookingAmount": "7500",
+        "EmailOptOut": "TRUE",
+        "SMSOptOut": "FALSE"
+      },
+      {
+        "ContactKey": "1002",
+        "FirstName": "Jane",
+        "LastName": "Smith",
+        "LoyaltyTier": "Silver",
+        "LastVisitedDate": "2024-05-15",
+        "InterestedProperty": "Arias",
+        "LastBookingAmount": "5000",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "TRUE"
+      },
+      {
+        "ContactKey": "1003",
+        "FirstName": "Michael",
+        "LastName": "Brown",
+        "LoyaltyTier": "Platinum",
+        "LastVisitedDate": "2024-07-01",
+        "InterestedProperty": "Casino Royale",
+        "LastBookingAmount": "10000",
+        "EmailOptOut": "TRUE",
+        "SMSOptOut": "FALSE"
+      },
+      {
+        "ContactKey": "1004",
+        "FirstName": "Emily",
+        "LastName": "Johnson",
+        "LoyaltyTier": "Gold",
+        "LastVisitedDate": "2024-06-25",
+        "InterestedProperty": "MGM Grand",
+        "LastBookingAmount": "7500",
+        "EmailOptOut": "TRUE",
+        "SMSOptOut": "FALSE"
+      },
+      {
+        "ContactKey": "1005",
+        "FirstName": "David",
+        "LastName": "Wilson",
+        "LoyaltyTier": "Silver",
+        "LastVisitedDate": "2024-03-28",
+        "InterestedProperty": "Arias",
+        "LastBookingAmount": "3000",
+        "EmailOptOut": "TRUE",
+        "SMSOptOut": "TRUE"
+      },
+      {
+        "ContactKey": "1006",
+        "FirstName": "Sarah",
+        "LastName": "Taylor",
+        "LoyaltyTier": "Platinum",
+        "LastVisitedDate": "2024-07-08",
+        "InterestedProperty": "Casino Royale",
+        "LastBookingAmount": "12000",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "FALSE"
+      },
+      {
+        "ContactKey": "1007",
+        "FirstName": "James",
+        "LastName": "Moore",
+        "LoyaltyTier": "Gold",
+        "LastVisitedDate": "2024-04-18",
+        "InterestedProperty": "MGM Grand",
+        "LastBookingAmount": "9000",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "FALSE"
+      },
+      {
+        "ContactKey": "1008",
+        "FirstName": "Olivia",
+        "LastName": "Martinez",
+        "LoyaltyTier": "Silver",
+        "LastVisitedDate": "2024-05-10",
+        "InterestedProperty": "Arias",
+        "LastBookingAmount": "4500",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "TRUE"
+      },
+      {
+        "ContactKey": "1009",
+        "FirstName": "William",
+        "LastName": "Jackson",
+        "LoyaltyTier": "Platinum",
+        "LastVisitedDate": "2024-06-15",
+        "InterestedProperty": "Casino Royale",
+        "LastBookingAmount": "11000",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "FALSE"
+      },
+      {
+        "ContactKey": "1010",
+        "FirstName": "Emma",
+        "LastName": "Davis",
+        "LoyaltyTier": "Gold",
+        "LastVisitedDate": "2024-07-22",
+        "InterestedProperty": "MGM Grand",
+        "LastBookingAmount": "8500",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "FALSE"
+      }
+    ],
+    "fieldsDefinition": [
+      {
+        "Name": "FirstName",
+        "CustomerKey": "FirstName",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LastName",
+        "CustomerKey": "LastName",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LoyaltyTier",
+        "CustomerKey": "LoyaltyTier",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LastVisitedDate",
+        "CustomerKey": "LastVisitedDate",
+        "FieldType": "Date",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "InterestedProperty",
+        "CustomerKey": "InterestedProperty",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LastBookingAmount",
+        "CustomerKey": "LastBookingAmount",
+        "FieldType": "Number",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "EmailOptOut",
+        "CustomerKey": "EmailOptOut",
+        "FieldType": "Boolean",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "SMSOptOut",
+        "CustomerKey": "SMSOptOut",
+        "FieldType": "Boolean",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      }
+    ]
+  }

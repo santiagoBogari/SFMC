@@ -1,0 +1,24 @@
+%%[
+VAR @email, @subscriberKey, @firstName, @lastName, @now
+
+SET @email = AttributeValue("email")
+SET @firstName = AttributeValue("FirstName")
+SET @lastName = AttributeValue("LastName")
+SET @subscriberKey = AttributeValue("Subscriberkey")
+SET @now = Now(1)
+
+UpsertDE("Reconfirmation_Log",1, "SubscriberKey", @subscriberKey, "Email", @email,"FirstName",@firstName,"LastName",@lastname,"SendDate",@now)
+]%%
+
+Hi %%=v(@firstName)=%%,
+
+We hope you have been enjoying our services over the past few months. We wanted to remind you that we periodically ask our customers to confirm their interest in receiving our emails. 
+
+If you are still interested in receiving our emails, please click the link below to confirm your subscription. It only takes a few seconds!
+
+Confirm Subscription
+
+Thanks for being a valued customer. We look forward to continuing to serve you.
+
+Best regards,
+Next Media

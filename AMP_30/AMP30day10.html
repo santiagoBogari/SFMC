@@ -1,0 +1,16 @@
+%%[
+VAR @firstName, @correctFirstName
+SET @firstName = AttributeValue("FirstName")
+SET @firstName = Replace(@firstName, "@", "")
+SET @correctFirstName = Replace(@firstName, "#", "")
+]%%
+
+Hello %%=v(@correctFirstName)=%%,
+Thank you for attending our recent networking event. We hope you enjoyed the opportunity to connect with others in the industry and learn more about our SAAS product.
+
+As a follow-up, we would like to offer you a free trial of our SAAS product. Simply reply to this email, and we will set up your account.
+
+Thank you again for your participation in our event, and we hope to hear from you soon.
+
+Best regards,
+The SAAS Company

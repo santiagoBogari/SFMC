@@ -1,0 +1,21 @@
+%%[
+VAR @firstName, @lastName, @rentals, @delta
+SET @firstName = AttributeValue("FirstName")
+SET @lastName = AttributeValue("LastName")
+SET @rentals = Lookup("Rental_Transactions", "Count", "Email", emailaddr)
+IF @rentals >= 10 THEN
+	SET @message = "you have earned 100 points."
+ELSEIF @rentals < 10 THEN
+	SET @delta = Subtract(10,@rentals)	
+	SET @message = CONCAT("you are", @delta, "rent(s) away to earn 100 points.")
+ENDIF
+]%%
+
+Hello %%=v(@firstName)=%% %%=v(@lastName)=%%,
+
+Congratulations on renting from our car rental services! You have rented a total of %%=v(@rentals)=%% time(s) and %%=v(@message)=%%.
+
+Thank you for your continued loyalty to our business. We hope to see you soon!
+
+Best regards,
+The Next Auto

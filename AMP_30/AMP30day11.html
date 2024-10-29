@@ -1,0 +1,20 @@
+%%[
+VAR @city, @rows, @rowCount, @row, @randomRow, @randomTrail
+SET @city = AttributeValue("City")
+SET @rows = LookupRows("Summer_Trails", "City", @city)
+SET @rowCount = RowCount(@rows)
+IF @rowCount > 0 THEN
+    SET @randomRow = Random(1, @rowCount)
+    SET @row = Row(@rows,@randomRow)
+    SET @randomTrail = Field(@row, "Trail",0)    
+ENDIF
+]%%
+
+Hello,
+
+Summer is here and it is the perfect time for a hike! We wanted to share some amazing trail destinations in your city to explore. Our team has picked out great trails that are perfect for every skill level.
+
+One of the trails we recommend is %%=v(@randomTrail)=%%. It is perfect for hikers of all levels and offers breathtaking views of the surrounding landscape.
+
+Best,
+The Outdoor Equipment Company

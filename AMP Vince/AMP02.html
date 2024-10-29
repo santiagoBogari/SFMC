@@ -1,0 +1,53 @@
+<!-- June Games: Week 2
+Practice Assignment: Personalizing Vehicle Recall Service Emails
+ -->
+
+
+%%[
+
+/* RETRIEVE FIELDS */
+SET @firstName = [First Name]
+SET @carMake = [CarMake]
+SET @carModel = [CarModel]
+SET @carColor = [CarColor]
+SET @registrationDate = [RegistrationDate]
+SET @rego = [rego]
+
+/* FIRST NAME CLEANING */
+SET @firstNameTrim = Trim(@firstName)
+SET @finalName = Propercase(@firstNameTrim)
+
+/* CAR DETAILS */
+SET @carMakeUpper = Uppercase(@carMake)
+SET @carDetails = CONCAT(@carMakeUpper, " ", @carModel)
+
+/* REGISTRATION DETAILS */
+SET @regoDateFormat = FormatDate(@registrationDate, "dd/MM/YYYY")
+
+/* RECALL DATE FORMAT */
+SET @systemDate = Now(1)
+SET @localDate = SystemDateToLocalDate(@systemDate)
+
+SET @recallDate = DateAdd(@localDate, 14, "D")
+SET @recallDateFormat = FormatDate(@recallDate, "MMMM dd, YYYY")
+
+
+]%%
+
+Subject: Important Recall Notice for Your %%=v(@carDetails)=%%
+
+Body:
+
+Hello %%=v(@finalName)=%%, 
+
+We are writing to inform you of an important recall for your  %%=v(@carDetails)=%%. According to our records, your vehicle with the rego number %%=v(@rego)=%%, registered on %%=v(@regoDateFormat)=%%, needs to be brought in for a service repair. 
+
+Please return your %%=V(@carDetails)=%% (%%=V(@carColor)=%% colour) by %%=v(@recallDateFormat)=%% to ensure your vehicle is safe to drive. 
+
+We apologize for any inconvenience this may cause and appreciate your prompt attention to this matter. 
+
+Best regards, 
+
+Your Car Service Team 
+
+P.S. If you have any questions or need to reschedule, please contact us at support@carservice.com.

@@ -1,0 +1,15 @@
+%%[
+VAR @email, @defaultPromo, @promoCode
+
+SET @email = AttributeValue("email")
+SET @defaultPromo = "WELCOME15"
+
+SET @promoCode = ClaimRowValue("Promo_Codes", "PromoCode", "IsClaimed", @defaultPromo, "Email", @email)
+]%%
+
+Hello,
+
+Thank you for your interest to our new product line! Here is your special promo code for your next purchase: %%=v(@promoCode)=%%.
+
+Best regards,
+The Next Beauty

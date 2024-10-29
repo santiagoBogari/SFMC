@@ -1,0 +1,90 @@
+%%[
+  /* Retrieve values from query string parameters */  
+  SET @email = QueryParameter("Email")  
+  SET @promoClaimed = Lookup ("Promo_Codes","PromoCode","Email",@email)
+  
+  /* Check if form has been submitted */
+  IF RequestParameter("submitted") == "true" THEN  
+    
+    /* Retrieve the value from the PromoCode column */ 
+    SET @promoCode = ClaimRowValue("Promo_Codes", "PromoCode", "IsClaimed", @defaultPromo, "Email", @email) 
+
+    /* Display success message */  
+    SET @success = Concat("Here is your special promo code for your next purchase: ", @promoCode)
+  
+  ENDIF
+]%%
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Sabuhi Yahyayev, AMPscript30">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Day 22 Challenge </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+  </head>
+  <body>
+    
+ <div class="col-lg-8 mx-auto p-3 py-md-5">
+  <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+    <a href="/" class="d-flex align-items-center text-dark text-decoration-none fs-4">
+      Your Logo
+    </a>
+  </header>
+
+  %%[ IF Empty(@email) THEN ]%%
+  <main>
+    <div class="row">
+      <div class="col-md-6 offset-md-3 text-center">
+        <p class="alert alert-primary">The link has expired. This can occur if the link was forwarded or if you did not click the link from the email.</p>
+      </div>
+    </div>
+  </main>
+  
+  %%[ ELSE ]%% 
+
+  <main>
+    <div class="row">
+      <div class="col-md-6 offset-md-3 text-center">
+        <h1>Claim your promo code</h1>
+        
+          %%[ IF NOT empty(@promoClaimed) THEN ]%%
+        
+          <p class="fs-5">You have already claimed your promo code. Here you go:</p>
+          <p class="alert alert-success">%%=v(@promoClaimed)=%%</p>
+        
+         %%[ ELSEIF NOT empty(@success) THEN ]%%
+        
+          <p class="fs-5">Awesome, here is your promo code:</p>
+          <p class="alert alert-success">%%=v(@success)=%%</p>
+        
+         %%[ ELSE ]%%
+        
+         <p class="fs-5">There is only one more thing to do: click the claim promo code button below to receive your unique promo code.</p>
+        
+        <form method="post">
+          <input type="hidden" name="submitted" value="true">
+          <input type="hidden" name="Email" value="%%=v(@email)=%%">
+          <button type="submit" class="btn btn-primary btn-lg">Claim Promo Code</button>
+        </form>  
+        
+        %%[ ENDIF ]%%
+      
+      </div>
+    </div>
+  </main>
+  
+%%[ ENDIF ]%%  
+  
+  <footer class="pt-5 my-5 text-muted border-top">
+    Created for AMPscript30 &middot; &copy; 2023
+  </footer>
+</div>
+      
+  </body>
+</html>

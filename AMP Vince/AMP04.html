@@ -1,0 +1,36 @@
+<!-- June Games: Week 4
+Practice Assignment: Personalizing University Newsletter Emails
+ -->
+
+ %%[
+ SET @FirstName = Propercase(AttributeValue("First Name"))
+ SET @Dprogram = Propercase(AttributeValue("DegreeProgram"))
+ SET @UppDprogram = Uppercase(@Dprogram)
+ SET @Courses = Uppercase(AttributeValue("Courses"))
+ SET @today = Now()
+ SET @WorkshopDate = FormatDate(DateAdd(@today, 7, "D"), "MMMM d, yyyy")
+ SET @GuestLecture  = FormatDate(DateAdd(@today, 14, "D"), "MMMM d, yyyy")
+ SET @CDay = FormatDate(@today, "dd ddddd")
+ SET @CMonth = Uppercase(FormatDate(@today, "MMMM")) 
+ ]%%
+
+ Subject: It’s your %%=v(@CDay)=%%, %%=v(@CMonth)=%% Monthly Newsletter: Updates for Your Bachelor of %%=v(@Dprogram)=%% Program 
+Body:
+
+Hello %%=v(@FirstName)=%%, <br>
+
+We are excited to share the latest news and updates for your Bachelor of %%=v(@Dprogram)=%% program. Here are some highlights and upcoming events tailored just for you: 
+<br>
+### Your Courses: <br>
+%%=v(@Courses)=%%
+<br><br>
+### Upcoming Events: <br>
+- **Workshop: Advanced Topics in %%=v(@UppDprogram)=%%** on %%=v(@WorkshopDate)=%%<br>
+- **Guest Lecture:  %%=v(@Dprogram)=%% Innovations** on %%=v(@GuestLecture)=%%. 
+<br><br>
+These events are designed to enhance your learning experience and provide you with additional resources and insights from experts in your field. 
+<br><br>
+We hope you find these events informative and engaging. Stay tuned for more updates and resources to support your studies. 
+<br><br>
+Best regards, <br>
+Your University Team 

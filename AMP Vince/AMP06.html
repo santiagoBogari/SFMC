@@ -1,0 +1,22 @@
+<!-- July Games: Week 1
+Practice Assignment: Service SMS Message for Overdrawn Accounts at SafeBank
+ -->
+
+ %%[
+/* RETREIVE FIELDS*/
+SET @fName = [FirstName]
+SET @accountNum = [AccountNumber]
+SET @negativeBal = [NegativeBalance]
+
+/* FIRST NAME CLEANING */
+SET @trimFname = TRIM(@fName)
+SET @properfName = PROPERCASE(@trimFname)
+
+/* TRANSFORMATION */
+SET @fourDigit = CONCAT("XXXXXXXX",substring(@accountNum,9,4))
+SET @negBalance = CONCAT("-",FORMAT(@negativeBal,"c"))
+]%%
+
+
+Hello %%=v(@properfName)=%%, Your SafeBank account ending in %%=v(@fourDigit)=%% is currently overdrawn by %%=v(@negBalance)=%%. Please deposit funds as soon as possible to avoid any fees.
+

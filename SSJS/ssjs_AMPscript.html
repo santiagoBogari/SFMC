@@ -78,3 +78,26 @@ SET @name = [name]
 
 
 <!--  -->
+%%[
+SET @id = [ContactKey]
+SET @name = [name]
+]%%
+
+
+
+<script runat=server>
+  Platform.Load("Core","1");
+
+    var id = Variable.GetValue("@id");
+    var name = Variable.GetValue("@name");
+    
+    var newID = "333"+id
+    Write(newID + name)
+    
+    Variable.SetValue("@name",newID);
+</script>
+<br>
+%%=v(@name)=%%
+
+<!--  -->
+

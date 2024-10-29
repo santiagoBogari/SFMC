@@ -1,0 +1,24 @@
+<!-- July Games: Week 4
+Practice Assignment: Reactivation Email Campaign for GameMasters Mobile App
+ -->
+
+ %%[
+SET @FirstName = AttributeValue("FirstName")
+SET @LastName = AttributeValue("LastName")
+SET @LastLoginDate = AttributeValue("LastLoginDate")
+SET @BonusPoints = AttributeValue("BonusPoints")
+SET @properfName = PROPERCASE(@FirstName)
+SET @properLName = PROPERCASE(@LastName)
+SET @Today = Now()
+SET @LastLoginDate_DateTime = DateParse(@LastLoginDate, "yyyy-MM-dd")
+SET @DaysSinceLastLogin = DateDiff(@LastLoginDate_DateTime, @Today, "D")
+SET @GreetingName = Concat("Master ", @properfName, " ", Substring(@properLName, 1, 1))
+]%%
+
+
+To %%=v(@GreetingName)=%%,
+<br>
+We miss you at GameMasters! It's been %%=v(@DaysSinceLastLogin)=%% days since you last logged in. Log back on and play one match to receive %%=v(@BonusPoints)=%% bonus credit points.
+<br>
+Happy gaming,
+GameMasters

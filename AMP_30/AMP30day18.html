@@ -1,0 +1,24 @@
+%%[
+VAR @firstName, @lastName, @appointmentDate, @appointmentLocation, @AppointmentCode, @appointmentMessage
+
+SET @fullname = Concat(AttributeValue("FirstName"), " ", AttributeValue("LastName"))
+SET @appointmentDate = FormatDate(AttributeValue("AppointmentDate"), "M")
+SET @appointmentTime = FormatDate(AttributeValue("appointmentDate"), "h:mm tt")
+SET @appointmentLocation = AttributeValue("AppointmentLocation")
+SET @appointmentCode = AttributeValue("AppointmentCode")
+]%%
+
+Hi %%=v(@fullname)=%%
+
+This is a friendly reminder that you have a dental appointment scheduled with us on %%=v(@appointmentDate)=%% at %%=v(@appointmentTime)=%%. Our office is located in %%=v(@appointmentLocation)=%%. We look forward to seeing you soon!
+
+In preparation for your appointment, here are a few things to keep in mind:
+
+%%=ContentBlockByName(CONCAT("AppointmentCode_",@appointmentCode))=%%
+
+If you need to reschedule your appointment or have any questions, please do not hesitate to contact our office.
+
+Thank you for choosing us as your dental care provider. We look forward to seeing you soon.
+
+Sincerely,
+Next Dental

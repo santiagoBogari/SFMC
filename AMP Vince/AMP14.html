@@ -1,0 +1,53 @@
+<!-- May Games: Week 1
+Practice Assignment: Registration Confirmation Email
+ -->
+
+ %%[
+
+/* Retrieve all required fields */
+SET @firstName = [First Name]
+SET @lastName = [Last Name]
+SET @pref = [Preferences]
+SET @phone = [Phone Number]
+SET @streetAddress = [Street Address]
+SET @postcode = [Postcode]
+SET @state = [State]
+SET @country = [Country]
+SET @email = [Email]
+SET @dob = [Date of Birth]
+
+/* logic for name cleaning */
+SET @firstNameTrim = Trim(@firstName)
+SET @finalFirstName = ProperCase(@firstNameTrim)
+
+SET @lastNameTrim = Trim(@lastName)
+SET @finalLastName = ProperCase(@lastNameTrim)
+
+SET @finalFullName = CONCAT(@finalFirstName, " ", @finalLastName)
+
+/* logic for email formatting */
+SET @emailLower = Lowercase(@email)
+
+/* logic full address */
+SET @fullAddress = CONCAT(@streetAddress, ", ", @state, ", ", @postcode, ", ", @country)
+
+]%%
+
+<!--  -->
+Hi %%=v(@finalFirstName)=%%, 
+    
+    Thank you for registering with us!
+    
+    Here are the details we have on file for you:
+    
+    Name: %%=v(@finalFullName)=%%
+    Preferences: %%=v(@pref)=%% 
+    Phone Number: %%=v(@phone)=%%
+    Address %%=v(@fullAddress)=%%
+    Email: %%=v(@emailLower)=%%
+    Date of Birth: %%=v(@dob)=%%
+    
+    If any of these details are incorrect, please click here to update your information.
+    
+    Best regards
+    The Team

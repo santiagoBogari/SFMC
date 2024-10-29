@@ -1,0 +1,82 @@
+<!--ssjs Stringify -->
+
+<script runat="server">
+    var json = {
+      "Flights": [
+        {
+          "Origin": "IND",
+          "Dest": "NYC",
+          "Price": 100.0
+        }
+        ,
+        {
+          "Origin": "IND",
+          "Dest": "LAX",
+          "Price": 200.0
+        }
+        ,
+        {
+          "Origin": "IND",
+          "Dest": "SEA",
+          "Price": 500.0,
+          "PerBagSurcharge": 25
+        }
+      ]
+    }
+    var str = Platform.Function.Stringify(json);
+    Platform.Response.Write(str)
+  </script>
+  
+
+<!-- InsertData - from Cloudpage Html block -->
+<script runat="server">
+    var json = {
+   "Flights": [
+     {
+       "Origin": "IND",
+       "Dest": "NYC",
+       "Price": 100.0
+     },
+     {
+       "Origin": "IND",
+       "Dest": "LAX",
+       "Price": 200.0
+     },
+     {
+       "Origin": "IND",
+       "Dest": "SEA",
+       "Price": 500.0,
+       "PerBagSurcharge": 25
+     }
+   ]
+ }
+    var str = Platform.Function.Stringify(json);
+    Platform.Response.Write(str)
+   
+   var response = Platform.Function.InsertData("addRowDE",["testJson"],[str]);
+   Platform.Response.Write(response)
+ </script>
+
+ <!--  -->
+
+ <!--  Stringify  -->
+
+ <script runat="server">
+  
+    var json = {
+   "employees":[
+     {"firstName":"John", "lastName":"Doe"},
+     {"firstName":"Anna", "lastName":"Smith"},
+     {"firstName":"Peter", "lastName":"Jones"}
+   ]
+   }
+     
+     for (var i = 0; i < json.employees.length; i++) {
+       var str =  Platform.Function.Stringify(json.employees[i]);
+     Platform.Response.Write(str + "<br>");
+   }
+   </script>
+   
+   <!--  -->
+   <!--  -->
+   

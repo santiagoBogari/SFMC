@@ -1,0 +1,35 @@
+%%[
+VAR @email, @subscriberKey, @firstName, @lastName
+
+SET @email = AttributeValue("email")
+SET @subscriberKey = AttributeValue("Subscriberkey")
+SET @firstName = AttributeValue("FirstName")
+SET @lastName = AttributeValue("LastName")
+SET @fullName = Concat(@firstName, " ", @lastName)
+]%%
+
+<p>
+  Hi %%=v(@fullName)=%%,
+</p>
+
+<p>Thank you for being a NextDesign customer. We'd love to get your feedback on one quick question. Just click on of the numbers below to submit your answer.</p>
+
+<p>How likely are you to recommend NextDesign to a friend or colleague?</p>
+
+<p>
+  <strong>Extremely Unlikely</strong><br>
+  %%[
+  VAR @surveyCount
+  SET @surveyCount = 0
+  FOR @counter = 1 TO 10 DO
+  SET @surveyCount=ADD(@surveyCount,1)
+  ]%%
+  <a href="%%=RedirectTo(CloudPagesUrl(3544,"SubscriberKey",@subscriberKey,"NPS",@surveyCount))=%%">%%=v(@surveyCount)=%%</a><br>
+  %%[ NEXT ]%% 
+<strong>Extremely Likely</strong>
+</p>
+
+<p>Thanks again for being a NextDesign customer!</p>
+
+<p>Best regards,<br>
+Next Design</p>

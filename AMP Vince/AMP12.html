@@ -1,0 +1,44 @@
+<!-- August Games: Week 1
+Practice Assignment: HealthConnect Appointment Reminder SMS
+ -->
+
+ %%[
+
+SET @firstName = [FirstName]
+SET @lastName = [LastName]
+SET @appointmentDate = [AppointmentDate]
+SET @doctorName = [DoctorName]
+SET @appointmentId=[AppointmentID]
+
+/* Clean and format the FirstName */
+IF NOT EMPTY(@firstName) THEN
+    SET @firstNameTrim = TRIM(@firstName)
+    SET @firstNameFinal = PROPERCASE(@firstNameTrim)
+ELSE
+    SET @firstNameFinal = "Valued Patient"
+ENDIF
+
+/* Format the Doctor's Name */
+SET @dNameTrim = TRIM(@doctorName)
+SET @doctor = PROPERCASE(@dNameTrim)
+
+/* Format the Appointment Date and Time */
+
+SET @aptDate = FORMATDATE(@appointmentDate,"MMMM d, yyyy")
+SET @aptTime = FORMATDATE(@appointmentDate,"hh:mm tt")
+
+
+
+/* Dynamic Reschedule Link */
+
+SET @link = CONCAT("http://healthconnect.com/reschedule?aptID=", @appointmentId)
+
+
+]%%
+
+
+Hi %%=v(@firstNameFinal)=%%, this is a reminder for your appointment on %%=v(@aptDate)=%% at %%=v(@aptTime)=%% with Dr. %%=v(@doctor)=%%. If you need to reschedule, click here: %%=v(@link)=%% 
+- HealthConnect.
+
+
+

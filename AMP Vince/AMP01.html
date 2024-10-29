@@ -1,0 +1,28 @@
+<!-- June Games: Week 1
+Practice Assignment: Personalizing Messages for Fitness Club Members
+-->
+
+%%[
+SET @firstName = [First Name]
+SET @lastName = [Last Name]
+SET @mtype = [MembershipType]
+SET @lastVisit = [LastVisit]
+SET @lastWeight = [LastWeight]
+SET @fnameTrim = Trim(@firstName)
+SET @finalName = Propercase(@fnameTrim)
+SET @upMemberType = Uppercase(@mtype)
+SET @scheduledClass = DateAdd(@lastVisit, 7, "D")
+SET @formatDate = FormatDate(@scheduledClass, "dd/MM/yyyy")
+
+]%%
+
+Hello %%=v(@finalName)=%%,
+<br>
+Welcome back to your fitness journey at our club!<br> As a valued %%=v(@upMemberType)=%% member, we're committed to helping you reach your goals.<br>
+
+Your last recorded weight was %%=v(@lastWeight)=%% lbs. Keep up the great work!<br>
+
+Just a reminder, your next scheduled class is on %%=v(@formatDate)=%%.<br> We can't wait to see you!
+<br>
+Best regards,
+Your Fitness Club Team

@@ -1,0 +1,172 @@
+{
+    "values": [
+      {
+        "contactkey": "1001",
+        "FirstName": "peter",
+        "LastName": "PARKER",
+        "Email": "iamspiderman@example.com",
+        "LoyaltyTier": "Bronze",
+        "JoinedProperty": "MGM Grand",
+        "JoinedDate": "2024-01-01",
+        "MostPlayedProperty": "MGM Grand",
+        "LastVisitedDate": "2024-07-28"
+      },
+      {
+        "contactkey": "1002",
+        "FirstName": "TONY",
+        "LastName": "Stark",
+        "Email": "ripironman@example.com",
+        "LoyaltyTier": "Diamond",
+        "JoinedProperty": "Casino Royale",
+        "JoinedDate": "2021-12-31",
+        "MostPlayedProperty": "Casino Royale",
+        "LastVisitedDate": "2024-08-01"
+      },
+      {
+        "contactkey": "1003",
+        "FirstName": "Steve",
+        "LastName": "Rogers",
+        "Email": "icandothisallday@example.com",
+        "LoyaltyTier": "Gold",
+        "JoinedProperty": "Arias",
+        "JoinedDate": "2021-06-17",
+        "MostPlayedProperty": "Casino Royale",
+        "LastVisitedDate": "2024-07-22"
+      },
+      {
+        "contactkey": "1004",
+        "FirstName": "Chris",
+        "LastName": "Martinez",
+        "Email": "chris.martinez1004@example.com",
+        "LoyaltyTier": "Bronze",
+        "JoinedProperty": "MGM Grand",
+        "JoinedDate": "2022-03-19",
+        "MostPlayedProperty": "Casino Royale",
+        "LastVisitedDate": "2023-02-07"
+      },
+      {
+        "contactkey": "1005",
+        "FirstName": "Anna",
+        "LastName": "Smith",
+        "Email": "anna.smith1005@example.com",
+        "LoyaltyTier": "Bronze",
+        "JoinedProperty": "Arias",
+        "JoinedDate": "2019-05-23",
+        "MostPlayedProperty": "MGM Grand",
+        "LastVisitedDate": "2024-03-10"
+      },
+      {
+        "contactkey": "1006",
+        "FirstName": "John",
+        "LastName": "Doe",
+        "Email": "john.doe1006@example.com",
+        "LoyaltyTier": "Gold",
+        "JoinedProperty": "Casino Royale",
+        "JoinedDate": "2020-01-10",
+        "MostPlayedProperty": "Arias",
+        "LastVisitedDate": "2024-06-01"
+      },
+      {
+        "contactkey": "1007",
+        "FirstName": "Emily",
+        "LastName": "Johnson",
+        "Email": "emily.johnson1007@example.com",
+        "LoyaltyTier": "Silver",
+        "JoinedProperty": "MGM Grand",
+        "JoinedDate": "2018-08-14",
+        "MostPlayedProperty": "Casino Royale",
+        "LastVisitedDate": "2023-11-22"
+      },
+      {
+        "contactkey": "1008",
+        "FirstName": "Michael",
+        "LastName": "Williams",
+        "Email": "michael.williams1008@example.com",
+        "LoyaltyTier": "Platinum",
+        "JoinedProperty": "Arias",
+        "JoinedDate": "2023-02-15",
+        "MostPlayedProperty": "MGM Grand",
+        "LastVisitedDate": "2024-05-18"
+      },
+      {
+        "contactkey": "1009",
+        "FirstName": "Daniel",
+        "LastName": "Johnson",
+        "Email": "daniel.johnson1009@example.com",
+        "LoyaltyTier": "Bronze",
+        "JoinedProperty": "Arias",
+        "JoinedDate": "2023-03-09",
+        "MostPlayedProperty": "MGM Grand",
+        "LastVisitedDate": "2021-12-31"
+      },
+      {
+        "contactkey": "1010",
+        "FirstName": "Robert",
+        "LastName": "Martinez",
+        "Email": "robert.martinez1010@example.com",
+        "LoyaltyTier": "Silver",
+        "JoinedProperty": "MGM Grand",
+        "JoinedDate": "2019-10-14",
+        "MostPlayedProperty": "Casino Royale",
+        "LastVisitedDate": "2019-05-15"
+      }
+    ],
+    "fieldsDefinition": [
+      {
+        "Name": "FirstName",
+        "CustomerKey": "FirstName",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LastName",
+        "CustomerKey": "LastName",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "Email",
+        "CustomerKey": "Email",
+        "FieldType": "EmailAddress",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LoyaltyTier",
+        "CustomerKey": "LoyaltyTier",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "JoinedProperty",
+        "CustomerKey": "JoinedProperty",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "JoinedDate",
+        "CustomerKey": "JoinedDate",
+        "FieldType": "Date",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "MostPlayedProperty",
+        "CustomerKey": "MostPlayedProperty",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LastVisitedDate",
+        "CustomerKey": "LastVisitedDate",
+        "FieldType": "Date",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      }
+    ]
+  }

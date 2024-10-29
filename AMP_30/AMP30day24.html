@@ -1,0 +1,22 @@
+%%[
+VAR @subscriberKey, @firstName, @lastName, @barcode
+
+SET @subscriberKey = AttributeValue("SubscriberKey")
+SET @firstName = AttributeValue("FirstName")
+SET @lastName = AttributeValue("LastName")
+SET @fullName = Concat(@firstName, " ", @lastName)
+SET @barcode = BarcodeURL(@subscriberKey, "Code128Auto", 280, 120)
+]%%
+
+Hi %%=v(@fullName)=%%,
+
+Thank you for signing up for the upcoming event organized by Next Sports! We're excited to have you as a coach and can't wait to see you there.
+
+Please find your unique barcode below. This barcode is essential for check-in at the event, so please ensure that you bring it with you on the day. 
+
+<img src="%%=v(@barcode)=%%">
+
+We look forward to seeing you soon!
+
+Best,
+Next Sports

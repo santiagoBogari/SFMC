@@ -1,0 +1,23 @@
+%%[
+VAR @today, @renewalDate, @paymentFrequency, @paymentAmount, @nextPaymentDate
+SET @today = Now()
+SET @paymentFrequency = AttributeValue("PaymentFrequency")
+SET @paymentAmount = AttributeValue("PaymentAmount")
+
+IF @paymentFrequency == "Monthly" then
+    SET @nextPaymentDate = DateAdd(@today, 1, "M")
+ELSEIF @paymentFrequency == "Annual" then
+    SET @nextPaymentDate = DateAdd(@today, 1, "Y")
+ENDIF
+
+SET @renewalDate = FormatDate(@nextPaymentDate, "MMMM d, yyyy")
+]%%
+
+Hello,
+
+Thank you for your payment of %%=v(@paymentAmount)=%% for your %%=v(@paymentFrequency)=%% subscription plan. Your subscription will expire on %%=v(@renewalDate)=%%. 
+
+If you have any questions about your subscription, please contact our customer support team.
+
+Sincerely,
+Next Telecom

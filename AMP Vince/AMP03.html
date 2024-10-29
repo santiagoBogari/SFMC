@@ -1,0 +1,18 @@
+<!--June Games: Week 3 Practice Assignment: Personalizing SMS Messages for Music Streaming Subscribers-->
+
+%%[
+    SET @FirstName = Propercase(AttributeValue("First Name"))
+    SET @date = AttributeValue("LastLogin")
+    SET @today = Now()
+    SET @month = FormatDate(@today, "MMMM")
+    SET @genre = Propercase(AttributeValue("MostPlayedGenre"))
+    SET @newGenre = AttributeValue("NewGenrePlaylistID")
+    SET @url = Concat("www.musicmadeforyou.com/", @newGenre)
+    SET @hoursSpent = AttributeValue("HoursSpent")
+    SET @musicHours = FormatNumber(@hoursSpent, "N1")
+]%%
+
+Hi %%=v(@FirstName)=%%,<br>
+We hope you're enjoying your time with us this %%=v(@month)=%%! <br>
+Seems like you've been grooving to a lot of %%=v(@genre)=%%, <br>
+spending a total of %%=v(@musicHours)=%% minutes listening. That’s amazing!<br> We want to let you know that we have curated a new playlist just for %%=v(@genre)=%% lovers like you.<br> You can check it out here: <a href="%%=v(@url)=%%">%%=v(@url)=%%</a>.

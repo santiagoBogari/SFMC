@@ -1,0 +1,206 @@
+{
+    "values": [
+      {
+        "ContactKey": "2001",
+        "FirstName": "Alice",
+        "LastName": "Johnson",
+        "MembershipTier": "Platinum",
+        "LastVisitDate": "2024-06-20",
+        "ClassesAttended": "18",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "FALSE",
+        "InterestedInOnlineClasses": "TRUE",
+        "InterestedInWellness": "TRUE",
+        "AttendedInPersonClasses": "FALSE"
+      },
+      {
+        "ContactKey": "2002",
+        "FirstName": "Bob",
+        "LastName": "Smith",
+        "MembershipTier": "Gold",
+        "LastVisitDate": "2023-12-10",
+        "ClassesAttended": "5",
+        "EmailOptOut": "TRUE",
+        "SMSOptOut": "FALSE",
+        "InterestedInOnlineClasses": "TRUE",
+        "InterestedInWellness": "FALSE",
+        "AttendedInPersonClasses": "TRUE"
+      },
+      {
+        "ContactKey": "2003",
+        "FirstName": "Charlie",
+        "LastName": "Brown",
+        "MembershipTier": "Silver",
+        "LastVisitDate": "2022-11-05",
+        "ClassesAttended": "20",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "TRUE",
+        "InterestedInOnlineClasses": "FALSE",
+        "InterestedInWellness": "TRUE",
+        "AttendedInPersonClasses": "TRUE"
+      },
+      {
+        "ContactKey": "2004",
+        "FirstName": "Diana",
+        "LastName": "Prince",
+        "MembershipTier": "Platinum",
+        "LastVisitDate": "2024-07-01",
+        "ClassesAttended": "10",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "FALSE",
+        "InterestedInOnlineClasses": "TRUE",
+        "InterestedInWellness": "FALSE",
+        "AttendedInPersonClasses": "TRUE"
+      },
+      {
+        "ContactKey": "2005",
+        "FirstName": "Edward",
+        "LastName": "Cullen",
+        "MembershipTier": "Gold",
+        "LastVisitDate": "2024-04-15",
+        "ClassesAttended": "12",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "TRUE",
+        "InterestedInOnlineClasses": "TRUE",
+        "InterestedInWellness": "TRUE",
+        "AttendedInPersonClasses": "FALSE"
+      },
+      {
+        "ContactKey": "2006",
+        "FirstName": "Fiona",
+        "LastName": "Gallagher",
+        "MembershipTier": "Diamond",
+        "LastVisitDate": "2024-01-20",
+        "ClassesAttended": "16",
+        "EmailOptOut": "TRUE",
+        "SMSOptOut": "FALSE",
+        "InterestedInOnlineClasses": "FALSE",
+        "InterestedInWellness": "TRUE",
+        "AttendedInPersonClasses": "FALSE"
+      },
+      {
+        "ContactKey": "2007",
+        "FirstName": "George",
+        "LastName": "Martin",
+        "MembershipTier": "Platinum",
+        "LastVisitDate": "2024-06-25",
+        "ClassesAttended": "18",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "FALSE",
+        "InterestedInOnlineClasses": "TRUE",
+        "InterestedInWellness": "FALSE",
+        "AttendedInPersonClasses": "TRUE"
+      },
+      {
+        "ContactKey": "2008",
+        "FirstName": "Hannah",
+        "LastName": "Montana",
+        "MembershipTier": "Gold",
+        "LastVisitDate": "2024-02-28",
+        "ClassesAttended": "25",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "TRUE",
+        "InterestedInOnlineClasses": "FALSE",
+        "InterestedInWellness": "TRUE",
+        "AttendedInPersonClasses": "TRUE"
+      },
+      {
+        "ContactKey": "2009",
+        "FirstName": "Ian",
+        "LastName": "Fleming",
+        "MembershipTier": "Diamond",
+        "LastVisitDate": "2024-05-14",
+        "ClassesAttended": "3",
+        "EmailOptOut": "TRUE",
+        "SMSOptOut": "FALSE",
+        "InterestedInOnlineClasses": "TRUE",
+        "InterestedInWellness": "FALSE",
+        "AttendedInPersonClasses": "FALSE"
+      },
+      {
+        "ContactKey": "2010",
+        "FirstName": "Jessica",
+        "LastName": "Rabbit",
+        "MembershipTier": "Platinum",
+        "LastVisitDate": "2024-06-17",
+        "ClassesAttended": "14",
+        "EmailOptOut": "FALSE",
+        "SMSOptOut": "FALSE",
+        "InterestedInOnlineClasses": "TRUE",
+        "InterestedInWellness": "TRUE",
+        "AttendedInPersonClasses": "FALSE"
+      }
+    ],
+    "fieldsDefinition": [
+      {
+        "Name": "FirstName",
+        "CustomerKey": "FirstName",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LastName",
+        "CustomerKey": "LastName",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "MembershipTier",
+        "CustomerKey": "MembershipTier",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LastVisitDate",
+        "CustomerKey": "LastVisitDate",
+        "FieldType": "Date",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "ClassesAttended",
+        "CustomerKey": "ClassesAttended",
+        "FieldType": "Number",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "EmailOptOut",
+        "CustomerKey": "EmailOptOut",
+        "FieldType": "Boolean",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "SMSOptOut",
+        "CustomerKey": "SMSOptOut",
+        "FieldType": "Boolean",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "InterestedInOnlineClasses",
+        "CustomerKey": "InterestedInOnlineClasses",
+        "FieldType": "Boolean",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "InterestedInWellness",
+        "CustomerKey": "InterestedInWellness",
+        "FieldType": "Boolean",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "AttendedInPersonClasses",
+        "CustomerKey": "AttendedInPersonClasses",
+        "FieldType": "Boolean",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      }
+    ]
+  }

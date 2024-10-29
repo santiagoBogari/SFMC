@@ -1,0 +1,21 @@
+%%[
+VAR @email
+SET @email = AttributeValue("Email") 
+
+IF IndexOf(email, "gmail.com") > 0 OR IndexOf(email, "yahoo.com") > 0 OR IndexOf(email, "bing.com") > 0 
+THEN 
+	SET @giftcardAmount = "$10"
+ELSE 
+	SET @giftcardAmount = "$50" 
+ENDIF 
+]%%
+
+Hello!
+We want to hear from you! Please take a moment to complete our survey and receive a gift card as a thank you.
+
+As a token of appreciation for your time, you will receive a gift card worth %%=v(@giftcardAmount)=%% upon completing the survey. 
+
+Thank you for your participation! 
+
+Best,
+The Data Analytics Company

@@ -1,0 +1,30 @@
+<!-- June Games: Week 5
+Practice Assignment: Personalizing SMS Messages for Engaged Users of SkillPro
+ -->
+
+ %%[
+
+SET @firstName = [First Name]
+SET @firstNameTrim = Trim(@firstName)
+SET @finalName = Propercase(@firstNameTrim)
+
+SET @userID = [ContactKey]
+
+/* LOGIC FOR REFERRAL CODE */
+SET @date = Now(1)
+SET @localDate = SystemDateToLocalDate(@date)
+SET @month = FormatDate(@localDate, "MMM")
+SET @monthCaps = Uppercase(@month)
+
+SET @referralLink = CONCAT("skillprofriends.com/",@userID,@monthCaps,"JOIN")
+
+/* LOGIC FOR SMS MESSAGE */
+
+SET @sms = CONCAT("Hello ", @finalName, ", Thank you for being one of our most engaged users! As a token of our appreciation, we're inviting you to refer at least three friends using your unique referral link ", @referralLink, ". Once your referrals join, you'll receive exclusive one-on-one access to our top coach to help develop your career and skill sets. Thank you for your support!")
+
+]%%
+
+%%=v(@sms)=%%<br><br>
+
+Reply back STOP to opt out of all sms marketing messages.
+

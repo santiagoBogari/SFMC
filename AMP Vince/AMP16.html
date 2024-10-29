@@ -1,0 +1,47 @@
+<!-- May Games: Week 3
+Practice Assignment: Order Shipment Notification Email
+ -->
+
+ %%[
+
+/* RETRIEVE FIELDS */
+SET @firstName = [First Name]
+SET @quantity = [Quantity]
+SET @product = [Product Name]
+SET @purchaseDate = [Purchase Date]
+SET @etaDate = [Estimated Delivery Date]
+SET @streetName = [Street Name]
+SET @city = [City]
+SET @postcode = [Postcode]
+SET @state = [State]
+SET @country = [Country]
+
+/* FIRST NAME CLEANING LOGIC */
+SET @firstNameTrim = Trim(@firstName)
+SET @finalName = Propercase(@firstNameTrim)
+
+/* PRODUCT NAME - LOWERCASE */
+SET @productName = Lowercase(@product)
+
+/* DATE REFORMAT */
+SET @purchaseDateFormat = FormatDate(@purchaseDate, "MMM dd, YYYY")
+SET @etaDateFormat = FormatDate(@etaDate, "MMM dd, YYYY")
+
+/* REMAINING DAYS CALCULATION */
+SET @systemDate  = Now(1)
+SET @localDate =  SystemDateToLocalDate(@systemDate)
+
+SET @remainingDays = DATEDIFF(@localDate, @etaDate, "D")
+
+/* FULL ADDRESS LOGIC */
+SET @fullAddress = CONCAT(@streetName, ", ", @city, ", ", @postcode, ", ", @state, ", ", @country)
+
+]%%
+
+<!--  -->
+Hi %%=v(@finalName)=%%! 
+
+📦 Your order of %%=v(@quantity)=%%x %%=v(@productName)=%%, purchased on %%=v(@purchaseDateFormat)=%% has been shipped. 
+
+It is estimated to be delivered in %%=v(@remainingDays)=%% days by %%=v(@etaDateFormat)=%% to the following address: %%=v(@fullAddress)=%%.
+

@@ -1,0 +1,41 @@
+<!-- August Games: Week 2
+Practice Assignment: LuxeHotels Post-Stay Email Campaign -->
+
+%%[
+  SET @fName = [FirstName]
+  SET @checkIN = [CheckInDate]
+  SET @checkOut = [CheckOutDate]
+  SET @roomNumber = [RoomNumber]
+  SET @stayID = [StayID]
+
+/*firstname*/
+IF NOT EMPTY(@fName) THEN
+  SET @fTrim = TRIM(@fName)
+  SET @finalName = PROPERCASE(@fTrim )
+ELSE
+  SET @finalName = "Hi There"
+ENDIF
+
+/*number of days*/
+SET @diffDays = Datediff(@checkIN,@checkOut, "d")
+
+/*date format*/
+SET @checkIndate = FORMAT(@checkIN, "MMMM d, yyyy" )
+SET @checkOut = FORMAT(@checkOut, "MMMM d, yyyy" )
+
+/*link*/
+SET @link = CONCAT("http://luxehotels.com/feedback?",@stayID,"&discount=LUXE2024") 
+]%%
+
+
+<!--  -->
+Hi %%=V(@finalName)=%%, 
+
+Thank you for staying with LuxeHotels! 
+
+We hope you enjoyed your stay for %%=V(@diffDays)=%% days in Room %%=V(@roomNumber)=%% from %%=v(@checkIndate)=%% to %%=v(@checkOut)=%%. 
+
+Please leave us a review or book your next stay with a 10% discount: <a href="%%=redirectTo(@link)=%%">Click Here</a>
+
+LuxeHotels
+

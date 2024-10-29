@@ -1,0 +1,29 @@
+<!-- July Games: Week 2
+Practice Assignment: Follow-Up SMS for Real Estate Open House at Prime Realty
+ -->
+
+ %%[
+
+/* Retrieve DE Fields */
+SET @fname = [FirstName]
+SET @suburb = [Suburb]
+SET @agentName = [AgentName]
+SET @agentMob = [AgentMobile]
+
+/* First Name Cleaning Logic */
+SET @fNameTrim = Trim(@fname)
+SET @finalName = Propercase(@fNameTrim)
+
+/* Suburb Cleaning Logic */
+SET @suburbTrim = Trim(@suburb)
+SET @finalSuburb = Propercase(@suburbTrim)
+
+/* Agent Mobile Reformat */
+SET @finalAgentMob = FormatNumber(@agentMob, "0### ### ###")
+
+]%%
+
+Hello %%=v(@finalName)=%%, Thank you for visiting our open house in %%=v(@finalSuburb)=%%. Are you still interested in buying a property in this area? For more information and insights on upcoming open houses, please contact %%=v(@agentName)=%% at %%=v(@finalAgentMob)=%%.
+
+Reply back STOP to opt out.
+

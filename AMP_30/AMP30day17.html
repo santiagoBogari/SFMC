@@ -1,0 +1,64 @@
+%%[
+VAR @subscriberKey, @email, @fullName, @lastTransactionId, @lastTransactionDate, @lastTransactions, @lastTransactionCount, @counter
+SET @subscriberKey = AttributeValue("SubscriberKey")
+SET @email = AttributeValue("Email")
+SET @fullname = Concat(AttributeValue("FirstName"), " ", AttributeValue("LastName"))
+SET @lastTransactionId = AttributeValue("LastTransactionId")
+SET @lasttransactionDate = AttributeValue("LastTransactionDate")
+SET @lastTransactions = LookupRows('Transaction_History', 'TransactionId', @LastTransactionId) 
+SET @lastTransactionCount = RowCount(@LastTransactions)
+]%%
+
+Hi %%=v(@fullname)=%%,
+
+This is the confirmation for the books you borrowed today:
+
+%%[
+IF @lastTransactionCount > 0 THEN
+FOR @counter = 1 to @LastTransactionCount DO
+  VAR @lastTransaction, @lastBookName
+  SET @lastTransaction = row(@lastTransactions, @counter)
+  SET @lastBookName = field(@lastTransaction,'BookName')
+)
+]%%
+
+%%=v(@lastBookName)=%%
+
+%%[ NEXT @counter ]%% 
+
+%%[ ELSE ]%%
+
+%%[ ENDIF ]%%
+
+Here are the books you borrowed before.
+
+%%[
+VAR @returns, @returnCount, @returnCounter
+
+SET @returns = LookupRows('Transaction_History', 'SubscriberKey', @subscriberKey, 'Status', 'Waiting') 
+SET @returnCount = RowCount(@returns)
+
+IF @returnCount > 3 THEN
+    SET @returnCount = 3
+ENDIF
+
+IF @returnCount > 0 THEN
+FOR @returnCounter = 1 to @returnCount DO
+  VAR @return, @bookName
+  SET @return = row(@returns, @returnCounter)
+  SET @bookName = field(@return,'BookName')
+)
+]%%
+
+%%=v(@bookName)=%%
+
+%%[ NEXT @returnCounter ]%% 
+
+%%[ ELSE ]%%
+
+Great job! You do not have any returns.
+
+%%[ ENDIF ]%%
+
+Best regards,
+Next Library

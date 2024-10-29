@@ -1,0 +1,18 @@
+%%[
+VAR @discountAmount, @fullName
+SET @discountAmount = Random(10, 50)
+SET @fullName = Concat(AttributeValue("FirstName"), " ", AttributeValue("LastName"))
+
+InsertDE("DiscountWinners", "SubscriberKey", AttributeValue("SubscriberKey"), "Discount", @discountAmount)
+]%%
+
+Hello %%=v(@fullName)=%%,
+
+Are you ready for some shopping? Today, we are offering our subscribers a special discount on their next purchase.
+
+Your discount is: %%=FormatNumber(@discountAmount, 0)=%%%
+
+Do not miss this opportunity and use it now.
+
+Best regards,
+The Fashion Store

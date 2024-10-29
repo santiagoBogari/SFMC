@@ -1,0 +1,22 @@
+%%[
+VAR @fullName, @firstName, @lastName, @email, @surveyURL, @surveyLink
+SET @firstName = AttributeValue("FirstName")
+SET @lastName = AttributeValue("LastName")
+SET @email = AttributeValue("Email")
+SET @fullName = Concat(@firstName,@lastName)
+SET @surveyURL = AttributeValue("SurveyURL")
+SET @surveyLink = Concat(@surveyURL,"&entry.1345373543=",@firstName,"&entry.1970641631=",@lastName,"&entry.1109494443=",@email)
+]%%
+
+Hi %%=v(@fullName)=%%,
+
+Thank you for choosing Next Rental. We value your business and want to improve our services to better serve you.
+
+Please take a moment to complete a short survey about your recent rental. Your feedback helps us to enhance our services.
+
+<a href="%%=RedirectTo(@surveyLink)=%%">Take the survey</a>
+
+Thank you for your time and feedback. We look forward to serving you again.
+
+Best regards,
+Next Rental

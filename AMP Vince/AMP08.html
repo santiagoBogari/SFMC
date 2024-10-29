@@ -1,0 +1,39 @@
+<!-- July Games: Week 3
+Practice Assignment: Upcoming Flight Reminder for SkyHigh Airlines
+ -->
+
+ %%[
+
+/* Retrieve fields from sending DE */
+SET @firstName = [FirstName]
+SET @flightDate = [FlightDate]
+SET @destination = [Destination]
+SET @flightNumber = [FlightNumber]
+
+
+/* Cleaning and formatting the first name*/
+
+IF NOT EMPTY(@firstName) THEN
+  SET @firstNameTrim = TRIM(@firstName)
+  SET @fNameFinal = PROPERCASE(@firstNameTrim)
+ELSE
+  SET @fNameFinal = "Customer"
+ENDIF
+
+/*Format the Destination name*/
+
+SET @dNameTrim = TRIM(@destination)
+SET @dNameFinal = PROPERCASE(@dNameTrim)
+
+/* Clean the Flight Date format*/
+
+SET @fDateFormatted = FORMAT(@flightDate,"MMMM dd, yyyy, hh:mm tt")
+
+/* Calculate the Airport Arrival Timing */
+
+SET @arrivalTime = FORMAT(DateAdd(@fDateFormatted,-2,"H"),"hh:mm tt")
+
+]%%
+
+
+Hello %%=v(@fNameFinal)=%%, This is a reminder for your upcoming flight to %%=v(@dNameFinal)=%% on %%=v(@fDateFormatted)=%%. Your flight number is %%=v(@flightNumber)=%%. Please arrive at the airport by %%=v(@arrivalTime)=%%, at least 2 hours before departure

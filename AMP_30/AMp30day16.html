@@ -1,0 +1,39 @@
+%%[
+VAR @email, @fullName, @orderId, @orders, @orderCount, @counter
+
+SET @email = AttributeValue("Email")
+SET @fullname = Concat(AttributeValue("FirstName"), " ", AttributeValue("LastName"))
+SET @orderId = AttributeValue("orderId")
+SET @orders = LookupRows('Order_Details', 'OrderId', @orderId) 
+SET @orderCount = RowCount(@orders)
+]%%
+
+Hi %%=v(@fullname)=%%,
+
+Thanks for your order! Good things are coming your way
+
+%%[
+IF @orderCount > 0 THEN
+FOR @counter = 1 to @orderCount DO
+VAR @productName, @productDesc, @qty, @productImage, @productPrice
+SET @order = row(@orders, @counter)
+SET @productName = field(@order,'ProductName')
+SET @productDesc = field(@order,'ProductDesc')
+SET @productQty = field(@order,'ProductQty')
+SET @productImg = field(@order,'ProductImg')
+SET @productPrice = field(@order,'ProductPrice')
+]%%
+
+%%=v(@productName)=%%: %%=v(@productDesc)=%%
+%%=v(@productQty)=%% at $%%=v(@productPrice)=%%
+
+%%[
+NEXT @counter 
+ELSE RaiseError('no rows found', true)
+ENDIF
+]%%
+
+If you have any questions, reply to this email or contact us at hello@nexttelecom.com
+
+Best regards,
+Next Telecom

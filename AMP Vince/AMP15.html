@@ -1,0 +1,27 @@
+<!-- May Games: Week 2
+Practice Assignment: Anniversary SMS Campaign
+ -->
+
+ %%[
+
+/* RETRIEVE FIELDS */
+SET @firstName = [First Name]
+SET @anniversaryDate = [Anniversary Date]
+SET @tenure = [Tenure]
+
+/* LOGIC FOR FIRST NAME */
+SET @firstNameTrim = Trim(@firstName)
+SET @finalName = Propercase(@firstNameTrim)
+SET @firstNameUpper = Uppercase(@firstNameTrim)
+
+/* LOGIC FOR DATE FORMAT */
+SET @annFormat = FormatDate(@anniversaryDate, "YYYYMMdd")
+
+/* LOGIC FOR DISCOUNT CODE */
+SET @discountCode = CONCAT("20OFF",@firstNameUpper,@annFormat)
+
+]%%
+
+<!--  -->
+Hi %%=v(@finalName)=%%! 🎉 Congratulations on your %%=v(@tenure)=%% years with us! We are so thankful for your loyalty. 
+Enjoy a 25% special discount with code %%=v(@discountCode)=%% on your next purchase. Shop now and celebrate with savings! 🛍️
