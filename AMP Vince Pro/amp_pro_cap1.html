@@ -1,3 +1,7 @@
+<!-- Capstone 1: Welcome Email Series  -->
+  
+<!-- Initial Welcome Email -->
+
 %%[
 SET @fName = AttributeValue("FirstName")
 SET @venueID = AttributeValue("VenueID")
@@ -61,3 +65,120 @@ We look forward to seeing you soon!<br>
 Best regards,<br>
 %%=v(@venueManager)=%%<br>
 Venue Manager, at the %%=v(@venueName)=%%
+
+
+<!-- Educational Email -->
+
+%%[
+SET @fName = AttributeValue("FirstName")
+SET @venueID = AttributeValue("VenueID")
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+   SET @firstName = "Member"
+ ENDIF
+ 
+ /* Venue FIELDS */
+SET @venueName = Lookup("Venue", "VenueName", "VenueID", @venueID)
+ /* Venue_Events FIELDS */
+SET @rows = LookupRows("Venue_Events", "VenueID", @venueID)
+
+SET @rowCount = rowcount(@rows)
+
+/* CHECKS IF THERE IS A ROW THAT EXISTS */
+ IF @rowCount > 0 THEN
+
+  SET @row = row(@rows,1)
+ 
+  SET @eventName = field(@row, "EventName")
+  SET @eventDate = field(@row, "EventDate")
+  SET @eventDescription = field(@row, "EventDescription")
+  SET @eventURL = field(@row, "EventURL")  
+ ELSE
+  /* THIS FUNCTION WILL CANCEL THE EMAIL OR SMS SEND */
+  RaiseError("No row was found")  
+ENDIF
+
+SET @dateFormat = FormatDate(@eventDate, "MMM dd, YYYY")
+/* REMAINING DAYS CALCULATION */
+SET @systemDate  = Now(1)
+SET @localDate =  SystemDateToLocalDate(@systemDate)
+SET @remainingDays = DATEDIFF(@localDate, @eventDate, "D")
+]%%
+
+Subject Line:<br>
+What's Happening at %%=v(@venueName)=%%: Upcoming Events You Can't Miss!
+<br><br>
+
+Template:<br> 
+
+Upcoming Events at %%=v(@venueName)=%%
+<br> <br>
+Hi %%=v(@firstName)=%%!
+<br> 
+We hope you're enjoying your time with us at %%=v(@venueName)=%%. To make sure you never miss out on the fun, here's a sneak peek at the upcoming event in the next %%=v(@remainingDays)=%% days.
+<br> <br>
+Event: %%=v(@eventName)=%% <br> 
+Date: %%=v(@dateFormat)=%% <br> 
+Description: %%=v(@eventDescription)=%% <br><br>
+
+Mark your calendar and get ready for a fantastic time. Each event is designed to offer you a memorable experience filled with entertainment and camaraderie. <br>
+
+Want to know more about these events or RSVP? <a href="https://facebook.com/redlion" target="_blank">%%=v(@eventURL)=%%</a> for all the details.
+<br>
+We can't wait to see you there!
+<br>
+Cheers,
+The %%=v(@venueName)=%% Team
+
+
+<!-- Discount Offer Email: -->
+
+%%[
+SET @fName = AttributeValue("FirstName")
+SET @venueID = AttributeValue("VenueID")
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+   SET @firstName = "Member"
+ ENDIF
+ 
+ /* Venue FIELDS */
+SET @venueName = Lookup("Venue", "VenueName", "VenueID", @venueID)
+SET @redemptionCode = Lookup("Venue", "VoucherPrefix", "VenueID", @venueID)
+
+ /* Venue_Events FIELDS */
+SET @eventURL = Lookup("Venue_Events", "EventURL", "VenueID", @venueID)
+
+SET @voucherCode = CONCAT(@redemptionCode,"-",@venueID)
+
+]%%
+
+Subject Line:<br>
+Exclusive Offer for New Members: Enjoy 20% Off at %%=v(@venueName)=%%!
+
+<br><br>
+
+Template:<br> 
+
+%%=v(@firstName)=%%, we have an exclusive offer just for you!
+  <br><br>
+Hi %%=v(@firstName)=%%!
+<br>
+As a token of our appreciation for joining us, we're excited to offer you an exclusive discount on your next visit. Enjoy a special 20% off on your next meal or drink at %%=v(@venueName)=%%.
+<br>
+Simply show this email to your server with your unique redemption code %%=v(@voucherCode)=%% to redeem your discount.
+<br><br>
+<a href="%%=v(@eventURL)=%%" style="text-decoration: none;">
+    <button type="button" style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Visit the Venue
+    </button>
+</a>
+<br><br>
+Thank you for choosing %%=v(@venueName)=%%. We look forward to serving you soon!
+<br><br>
+Cheers,
+The %%=v(@venueName)=%% Team
+
