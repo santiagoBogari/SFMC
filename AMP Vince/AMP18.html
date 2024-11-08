@@ -1,0 +1,35 @@
+<!-- Week 4: Sample Brief Exercise 1
+Practice Assignment: Creating an Event Promotional Email
+ -->
+
+ %%[
+ SET @fName = AttributeValue("FirstName")
+ SET @mppID = AttributeValue("MostPlayedPropertyID")
+ 
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+   SET @firstName = "Member"
+ ENDIF
+ 
+ IF NOT EMPTY(@mppID) THEN
+ SET @ppName = Lookup("Properties", "PropertyName", "PropertyID", @mppID)
+ SET @eventName = Lookup("Events", "EventName", "PropertyID", @mppID)
+ SET @eventDate = Lookup("Events", "EventDate", "PropertyID", @mppID)
+ SET @eventDescription = Lookup("Events", "EventDescription", "PropertyID", @mppID)
+ SET @date = FormatDate(@eventDate, "ddddd, MMMM d yyyy")
+ ELSE
+ RaiseError("No product was found")
+ ENDIF
+ ]%%
+ 
+ Hi %%=v(@firstName)=%%
+ <br>
+ We are excited to inform you about an upcoming event at your favorite property, most played: "%%=v(@ppName)=%%".
+ <br>
+ Event Details:<br>
+ ● Event Name: %%=v(@eventName)=%%<br>
+ ● Date: %%=v(@date)=%%<br>
+ ● Description: %%=v(@eventDescription)=%% <br>
+ <br>
+ We look forward to seeing you there!

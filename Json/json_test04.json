@@ -1,0 +1,84 @@
+{
+    "values": [
+      {
+        "contactkey": "1001",
+        "CustomerID": "1001",
+        "FirstName": "john",
+        "LoyaltyTier": "VIP",
+        "Points": "120",
+        "LastPurchaseDate": "2024-08-15",
+        "PreferredCategory": "Handbags"
+      },
+      {
+        "contactkey": "1002",
+        "CustomerID": "1002",
+        "FirstName": "sArAh",
+        "LoyaltyTier": "Silver",
+        "Points": "80",
+        "LastPurchaseDate": "2024-09-25",
+        "PreferredCategory": "Women's Coats"
+      },
+      {
+        "contactkey": "1003",
+        "CustomerID": "1003",
+        "FirstName": "Mike",
+        "LoyaltyTier": "Bronze",
+        "Points": "30",
+        "LastPurchaseDate": "2024-07-20",
+        "PreferredCategory": "Men's Shoes"
+      },
+      {
+        "contactkey": "1004",
+        "CustomerID": "1004",
+        "FirstName": "Emily",
+        "LoyaltyTier": "VIP",
+        "Points": "200",
+        "LastPurchaseDate": "2024-10-01",
+        "PreferredCategory": "Jewelry Accessories"
+      }
+    ],
+    "fieldsDefinition": [
+      {
+        "Name": "CustomerID",
+        "CustomerKey": "CustomerID",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "FirstName",
+        "CustomerKey": "FirstName",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LoyaltyTier",
+        "CustomerKey": "LoyaltyTier",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "Points",
+        "CustomerKey": "Points",
+        "FieldType": "Number",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "LastPurchaseDate",
+        "CustomerKey": "LastPurchaseDate",
+        "FieldType": "Date",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      },
+      {
+        "Name": "PreferredCategory",
+        "CustomerKey": "PreferredCategory",
+        "FieldType": "Text",
+        "IsRequired": false,
+        "IsPrimaryKey": false
+      }
+    ]
+  }

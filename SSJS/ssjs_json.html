@@ -79,4 +79,36 @@
    
    <!--  -->
    <!--  -->
-   
+   <br><br>
+
+<script runat="server">
+     var dataRows = Platform.Function.LookupRows('SampleRows','EmailOptIn','True');
+     if(dataRows && dataRows.length > 0) {
+          for(var i=0; i<dataRows.length; i++) {
+               Platform.Response.Write(dataRows[i]["Firstname"]) + " - " + Platform.Response.Write(dataRows[i]["EmailAddress"]+ "<br>");
+          }
+     }
+</script>
+
+<ul>
+%%[
+  Set @members = LookupRows("SampleRows","EmailOptIn","True")
+  Set @rowCount = RowCount(@members)
+
+  If @rowCount > 0 then
+    For @counter = 1 to @rowCount do
+      Set @row = Row(@members, @counter)
+      Set @memberId = Field(@row, "ID")
+      Set @firstName = Field(@row, "FirstName")
+      Set @surname = Field(@row, "EmailAddress")
+      
+]%%
+  <li>%%=v(@firstName)=%% %%=v(@surname)=%% (member ID %%=v(@memberId)=%%) </li>
+%%[
+      Next @counter
+  EndIf
+]%%
+</ul> 
+
+<!--  -->
+ContactKey

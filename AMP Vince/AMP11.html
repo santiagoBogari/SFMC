@@ -1,0 +1,32 @@
+<!-- October Games: Week 4
+Practice Assignment: SMS Points Expiry Reminder
+ -->
+
+%%[
+
+/* Get data from default table */
+SET @firstName = [FirstName]
+SET @pointsRemaining = [PointsRemaining]
+SET @pointsRemFormat = FormatNumber(@pointsRemaining, "#,###")
+SET @membershipRenewalDate = [MembershipRenewalDate]
+SET @bitlyCode = [BitlyCode]
+
+/* FORMAT DATE */
+SET @formatMembershipRenewalDate = FormatDate(@membershipRenewalDate, "MMM d")
+
+/* First Name */
+SET @firstNameTrim = Trim(@firstName)
+SET @firstNameProperCase = Propercase(@firstNameTrim)
+SET @displayFirstName= IIF(Not Empty(@firstName), @firstNameProperCase, "Hi there")
+
+/* number of days left */
+SET @systemDate = Now(1) 
+SET @localDate = SystemDateToLocalDate(@systemDate)
+SET @daysLeft = DateDiff(@localDate, @membershipRenewalDate, "D")
+
+/* Generate URL */
+SET @displayURL = Concat("prime.fit.com/", @bitlyCode)
+
+]%%
+%%=v(@displayFirstName)=%%, you have %%=v(@pointsRemFormat)=%% pts left to use in the next %%=v(@daysLeft)=%% days before your membership renews on %%=v(@formatMembershipRenewalDate)=%%. Redeem your points now: %%=v(@displayURL)=%%<br><br>
+Reply UNSUB to opt out of marketing messages

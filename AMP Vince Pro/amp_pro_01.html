@@ -1,0 +1,55 @@
+<!-- November Pro Games: Week 1
+Practice Assignment: Black Friday Early Access SMS (Advanced)
+ -->
+
+%%[
+SET @CustomerID = [CustomerID]
+SET @FirstName = PROPERCASE(TRIM(AttributeValue("FirstName")))
+SET @PCategory = AttributeValue("PreferredCategory")
+SET @LTier = AttributeValue("LoyaltyTier")
+SET @LastPDate = AttributeValue("LastPurchaseDate")
+SET @Points = AttributeValue("Points")
+SET @Now = Now()
+SET @DateD = DateAdd(@Now, '-90','D')
+SET @Letter = SUBSTRING(@LTier, 1, 1)
+SET @NextDay = DateParse("2024-11-29")
+SET @diff = DateDiff(@Now, @NextDay, "D")
+
+IF @LTier == "VIP" AND @LastPDate > @DateD THEN
+ SET @Disc = "30%"
+ELSEIF @LTier == "VIP" AND @LastPDate < @DateD THEN
+ SET @Disc = "20%"
+ELSEIF @LTier == "Silver" THEN
+ SET @Disc = "15%"
+ELSE
+ SET @Disc = "10%"
+ENDIF
+
+IF @LTier == "VIP" THEN
+ SET @Access = "VIP Access"
+ELSE 
+ SET @Access = "Exclusive Access"
+ENDIF
+ 
+SET @Dcode = Concat("BF",@CustomerID,@Letter)
+
+IF @LTier == "VIP" THEN
+ SET @Link = "shop.com/vip-early-access"
+ELSE
+ SET @Link = "shop.com/early-access"
+ENDIF
+
+SET @Greeting = Concat(
+    "Hi ", @FirstName, "! ", 
+    @Access, " to our Black Friday Sale! Use code ", 
+    @Dcode, " for ", @Disc, " off. Check out your favourite ", 
+    @PCategory, " styles! Use your ", @Points, 
+    " points & get early access here: ", @Link, ". ",
+    "Only ", @diff, " days left, <3 Hurry!"
+)
+]%%
+
+ 
+%%=v(@Greeting)=%%
+
+Reply Unsub to opt out of Marketing Messages

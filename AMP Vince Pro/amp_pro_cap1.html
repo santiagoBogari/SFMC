@@ -1,0 +1,63 @@
+%%[
+SET @fName = AttributeValue("FirstName")
+SET @venueID = AttributeValue("VenueID")
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+   SET @firstName = "Member"
+ ENDIF
+ 
+ /* Venue FIELDS */
+
+SET @rows = LookupRows("Venue", "VenueID", @venueID)
+
+SET @rowCount = rowcount(@rows)
+
+/* CHECKS IF THERE IS A ROW THAT EXISTS */
+ IF @rowCount > 0 THEN
+
+  SET @row = row(@rows,1)
+ 
+  SET @venueName = field(@row, "VenueName")
+  SET @logoURL = field(@row, "LogoURL")
+  SET @phoneNum = field(@row, "ContactInfo")
+  SET @facebookLink = field(@row, "FacebookLink")
+  SET @address = field(@row, "Address")
+  SET @venueManager = field(@row, "VenueManager")
+ ELSE
+  
+  /* THIS FUNCTION WILL CANCEL THE EMAIL OR SMS SEND */
+  RaiseError("No row was found")  
+
+ENDIF
+]%%
+
+Subject Line:<br>
+Welcome to %%=v(@venueName)=%%, %%=v(@firstName)=%%!
+<br><br>
+Template:<br>
+Welcome to %%=v(@venueName)=%%
+<br><br>
+*** Email Hero Image: ***<br><br>
+<img src="@logoURL" alt=" %%=v(@venueName)=%%">
+<br><br>
+Hello %%=v(@firstName)=%%, welcome to %%=v(@venueName)=%%!
+<br>
+We are thrilled to have you with us at %%=v(@venueName)=%%. Our venue offers a unique atmosphere and a variety of events that cater to all tastes. Whether you're here to enjoy a quiet evening with friends, catch the latest sports game, or attend one of our themed nights, we have something for everyone.
+<br><br>
+Here's what you can expect:<br>
+● Exclusive access to our events and promotions.<br>
+● Personalized offers and updates.<br>
+● A vibrant community of fellow patrons.<br>
+<br>
+Address: %%=v(@address)=%%<br>
+Contact us at : %%=v(@phoneNum)=%%<br>
+Follow us on Facebook: <a href="https://facebook.com/redlion" target="_blank">%%=v(@facebookLink)=%%</a>
+<br>
+<br>
+We look forward to seeing you soon!<br>
+<br>
+Best regards,<br>
+%%=v(@venueManager)=%%<br>
+Venue Manager, at the %%=v(@venueName)=%%

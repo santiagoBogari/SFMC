@@ -1,0 +1,120 @@
+<!-- Week 4: Sample Brief Exercise 2
+Practice Assignment: Creating a Personalised Email for Gym Members-->
+
+
+%%[
+SET @memberID = AttributeValue("MemberID")
+SET @prefWType = AttributeValue("PreferredWorkoutType")
+SET @fName = AttributeValue("FirstName")
+SET @now = Now()
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+   SET @firstName = "Member"
+ ENDIF
+ 
+SET @startDate = Lookup("Classes", "StartDate", "WorkoutType", @prefWType)
+SET @className = Lookup("Classes", "ClassName", "WorkoutType", @prefWType)
+SET @description = Lookup("Classes", "ClassDescription", "WorkoutType", @prefWType)
+
+SET @fDate = FormatDate(@startDate, "ddddd, MMMM d yyyy") 
+
+SET @lastActDate = Lookup("MemberActivity", "LastActivityDate", "MemberID", @memberID)
+SET @diff = DateDiff(@lastActDate, @now, "D")
+
+IF @diff > 30 THEN
+ SET @discount = "It looks like you haven't attended a class in a while. As a special incentive to get back into the groove, we're offering you a 20% discount on your next class. Use the code WELCOME20 at checkout."
+ENDIF
+]%%
+
+Hi %%=v(@firstName)=%%,
+<br>
+We have an exciting class coming up that matches your preferred workout type,  %%=v(@prefWType)=%%.
+<br>
+Class Details:<br>
+● Class Name: %%=v(@className)=%% <br>
+● Date: %%=v(@fDate)=%% <br>
+● Description: %%=v(@description)=%% <br>
+<br>
+%%=v(@discount)=%%
+<br>
+We look forward to seeing you soon!
+
+
+
+<!-- Vince Solution -->
+
+%%[
+
+/* RETREIVE FIELDS */
+SET @prefWorkOutType = [PreferredWorkoutType]
+SET @firstName = [FirstName]
+SET @memberID = [MemberID]
+
+/* FIRST NAME CLEANING LOGIC */
+IF NOT EMPTY(@firstName) THEN
+  SET @firstNameTrim = Trim(@firstName)
+  SET @finalName = Propercase(@firstNameTrim)
+ELSE 
+  SET @finalName = "there"
+ENDIF
+
+/* CLASS FIELDS */
+
+SET @rows = LookupRows("Classes", "WorkoutType", @prefWorkOutType)
+
+SET @rowCount = rowcount(@rows)
+
+/* CHECKS IF THERE IS A ROW THAT EXISTS */
+IF @rowCount > 0 THEN
+
+  SET @row = row(@rows,1)
+  /* IF YOU WANT TO RETRIEVE MORE THAN 3 FIELDS, ADD MORE ROWS AS PER BELOW */
+  /* IF YOU WANT TO RETRIEVE LESS THAN 3 FIELDS, REMOVE ROWS AS PER BELOW */
+  SET @ClassName = field(@row, "ClassName")
+  SET @StartDate = field(@row, "StartDate")
+  SET @classDate = FormatDate(@StartDate, "DD/MM/YYYY")
+  SET @ClassDescription = field(@row, "ClassDescription")
+
+/* IF THE ROW DOES NOT EXIST */
+ELSE
+  
+  /* THIS FUNCTION WILL CANCEL THE EMAIL OR SMS SEND */
+  RaiseError("No row was found")  
+
+ENDIF
+
+/* RETRIEVE LAST ACTIIVTY DATE */
+SET @systemDate = Now(1)
+SET @localDate = SystemDateToLocalDate(@systemDate)
+
+SET @lastActivityDate = Lookup("MemberActivity", "LastActivityDate", "MemberID", @memberID)
+SET @daysSinceLastActivity = DATEDIFF(@lastActivityDate, @localDate, "D")
+
+
+]%%
+
+
+
+Input the variables into the email template below.
+Email Template:
+
+
+
+Hi %%=v(@finalName)=%%
+
+We have an exciting class coming up that matches your preferred workout type,  <preferred workout type>.
+
+Class Details:
+●	Class Name: %%=v(@ClassName)=%%
+●	Date: %%=v(@classDate)=%%
+●	Description: %%=v(@ClassDescription)=%%
+
+%%[IF @daysSinceLastActivity > 30 THEN]%%
+It looks like you haven't attended a class in a while. As a special incentive to get back into the groove, we're offering you a 20% discount on your next class. Use the code WELCOME20 at checkout.
+%%[ENDIF]%%
+
+We look forward to seeing you soon!
+
+
