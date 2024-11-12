@@ -1,0 +1,64 @@
+<!-- November Pro Games: Week 2
+Practice Assignment: Cyber Monday Travel Promotion (Advanced)
+ -->
+
+ %%[
+ SET @fName = AttributeValue("FirstName")
+ SET @prefVacType = AttributeValue("PreferredVacationType")
+ SET @customerID = AttributeValue("CustomerID")
+ SET @location = AttributeValue("Location")
+ SET @tier = AttributeValue("Tier")
+ 
+ 
+  IF NOT EMPTY(@fName) THEN
+    SET @firstName = PROPERCASE(TRIM(@fName))
+  ELSE
+    SET @firstName = "Member"
+  ENDIF
+  
+  IF @tier == "VIP" THEN
+    SET @subjectLine = Concat("VIP Cyber Monday Offers Just for You, ", @firstName, "!")
+  ELSEIF @tier == "Gold" THEN
+    SET @subjectLine = Concat("Get Ready, ", @firstName, "! A Silver ", @prefVacType, " This Cyber Monday!")
+  ELSE
+    SET @subjectLine = Concat(@firstName, ", Your Exclusive Gold ", @prefVacType, " Getaway Awaits!")
+  ENDIF
+  
+  /* Dynamic Loyalty Message */
+  SET @loyaltyPoints = Lookup("CustomerLoyalty", "LoyaltyPoints", "CustomerID", @customerID)
+  
+  IF @loyaltyPoints > 10000 THEN
+    SET @dynamicLoyaltyMsg = "As one of our top travelers who last visited <Last Book Destination>, we’re excited to offer you a complimentary: <Special Perk>! "
+  ELSE
+    SET @dynamicLoyaltyMsg = "We appreciate your loyalty and can’t wait to see where your next adventure takes you! "
+  ENDIF
+  
+  
+  /* Destination */
+   SET @destinationName = Lookup("TopDestinations", "DestinationName", "VacationType", @prefVacType)
+   SET @description = Lookup("TopDestinations", "Description", "VacationType", @prefVacType)
+  
+  /* Set up countdown timer */
+  SET @now = Now()
+  SET @endDateTime = DateParse("2024-12-02 23:59:59")
+  SET @hoursLeft = DateDiff(@now, @endDateTime, "H")
+  
+ ]%%
+ 
+ Hi %%=v(@firstName)=%%,<br><br>
+ 
+ Get ready for your perfect escape this Cyber Monday! Here’s a special offer tailored just for you:<br>
+ Your Top Pick: %=v(@destinationName)=% <br>
+ ~ %=v(@description)=% <br>
+ <br><br>
+ Enjoy -discount- off! Use code -discount code=""-
+ <br><br>
+ Exclusive Perk for Our %%=v(@tier)=%% Members:
+ ● -tier perk=""-
+ <br><br>
+ %%=v(@dynamicLoyaltyMsg)=%%
+ <br><br>
+ Act now – only %%=v(@hoursLeft)=%% hours left to claim this offer!<br>
+ <a href="">Book Your Getaway Now</a>
+ Safe travels,<br>
+ TravelMeNow Company
