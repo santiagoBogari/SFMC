@@ -1,0 +1,106 @@
+<!-- NovemberProGames:Week 3 
+Practice Assignment: Hotel Booking Confirmation Email (Advanced)
+ -->
+
+%%[
+SET @guestID = AttributeValue("GuestID")
+SET @fName = AttributeValue("FirstName")
+SET @roomType = AttributeValue("RoomType")
+SET @checkInDate = AttributeValue("CheckInDate")
+SET @checkOutDate = AttributeValue("CheckOutDate")
+SET @guests = AttributeValue("Guests")
+SET @addOn = AttributeValue("AddOn")
+
+IF NOT EMPTY(@fName) THEN
+    SET @firstName = PROPERCASE(TRIM(@fName))
+ELSE
+    SET @firstName = "Dear Member"
+ENDIF 
+
+/* Subject line */
+SET @tier = Lookup("LoyaltyMembers", "Tier", "GuestID", @guestID)
+
+IF NOT EMPTY(@tier) THEN
+    SET @subjectLine = Concat("We’ve Reserved Your ",@roomType, ", ", @firstName,"! Get Ready for Exclusive Benefits")
+ELSE
+    SET @subjectLine = Concat("Booking Confirmed, ",@firstName,"! We Can’t Wait to See You Soon")
+ENDIF 
+
+/* Dates */
+SET @checkInDateFmt = FORMATDATE(@checkInDate,"MMMM d, yyyy")
+SET @checkOutDateFmt = FORMATDATE(@checkOutDate,"MMMM d, yyyy")
+SET @numOfNights = DateDiff(@checkInDate, @checkOutDate, "D")
+
+IF @numOfNights == 1 THEN
+ SET @durationMsg = "Enjoy your quick getaway!"
+ ELSEIF @numOfNights > 1 AND @numOfNights < 4 THEN
+ SET @durationMsg = "Enjoy your short stay!"
+ ELSEIF @numOfNights >= 4 THEN
+ SET @durationMsg = "Looking forward to a wonderful extended stay!"
+ ENDIF
+]%%
+
+Hi %%=v(@firstName)=%%,<br><br>
+Thank you for choosing UrbanStay Hotels! We’re excited to confirm your upcoming stay with us. Here’s a summary of your booking details:<br><br>
+● Room Type: %%=v(@roomType)=%%<br>
+● Check-In Date: %%=v(@checkInDateFmt)=%%<br>
+● Check-Out Date: %%=v(@checkOutDateFmt)=%%<br>
+● Duration: %%=v(@numOfNights)=%% <br><br>
+
+%%[
+/* Retrieve Amenities from the Room_Offers Data Extension */
+SET @amenities = Lookup("Room_Offers", "Amenities", "RoomType", @roomType)
+
+/* Split the amenities into an array using comma as the delimiter */
+SET @amenityList = BuildRowsetFromString(@amenities, ", ")
+SET @amenityCount = RowCount(@amenityList)
+
+/* Display the Room Type and its Amenities */
+]%%
+
+Your %%=v(@roomType)=%% Amenities:<br>
+%%[ 
+IF @amenityCount > 0 THEN
+    FOR @i = 1 TO @amenityCount DO
+        SET @amenity = Field(Row(@amenityList, @i), 1)
+]%%
+● %%=v(@amenity)=%%<br>
+%%[ 
+    NEXT @i 
+ENDIF 
+]%%
+<br>
+%%[
+/* Retrieve Benefits from the Loyalty_Benefits Data Extension using LookupRows */
+IF NOT EMPTY(@tier) THEN 
+    SET @benefitRows = LookupRows("Loyalty_Benefits", "Tier", @tier)
+    SET @benefitCount = RowCount(@benefitRows)
+
+    IF @benefitCount > 0 THEN
+        /* Display benefits */
+        OUTPUT(CONCAT("As a valued ", v(@tier), " member, enjoy these exclusive benefits:<br>"))
+        FOR @j = 1 TO @benefitCount DO
+            SET @benefit = Field(Row(@benefitRows, @j), "Benefit") /* Get the Benefit field from the current row */
+]%%
+● %%=v(@benefit)=%%<br>
+%%[ 
+        NEXT @j 
+    ELSE 
+]%%
+No exclusive benefits available for this tier.<br>
+%%[ 
+    ENDIF 
+ELSE 
+]%%
+Tier information is not available.<br>
+%%[ 
+ENDIF 
+]%%
+<br>
+<br>
+You have selected the following add-ons for your stay: %%=v(@addOn)=%% <br><br>
+%%=v(@durationMsg)=%%
+  <br><br>
+Thank you for choosing UrbanStay Hotels. We can’t wait to welcome you soon!<br>
+Warm regards,<br>
+The UrbanStay Hotels Team

@@ -182,3 +182,218 @@ Thank you for choosing %%=v(@venueName)=%%. We look forward to serving you soon!
 Cheers,
 The %%=v(@venueName)=%% Team
 
+
+<!-- LUEGO DE CORRECCIONES DE VINCE -->
+
+<!-- Initial Welcome Email:---------------------------------------------------------------------------- -->
+
+%%[
+SET @fName = AttributeValue("First Name")
+SET @venueID = AttributeValue("VenueID")
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+   SET @firstName = "there"
+ ENDIF
+ 
+ /* Subject line */
+IF NOT EMPTY(@fName) THEN
+   SET @subjectLine = Concat("Welcome to ", @venueName, ", ", @firstName, "!")
+ELSE 
+   SET @subjectLine = Concat("Welcome to ", @venueName, ".")
+ENDIF
+ 
+ /* Venue FIELDS */
+SET @rows = LookupRows("Venue", "VenueID", @venueID)
+SET @rowCount = rowcount(@rows)
+
+ /* CHECKS IF THERE IS A ROW THAT EXISTS */
+ IF @rowCount > 0 THEN
+
+  SET @row = row(@rows,1)
+ 
+  SET @venueName = field(@row, "VenueName")
+  SET @logoURL = field(@row, "LogoURL")
+  SET @phoneNum = field(@row, "ContactInfo")
+  SET @facebookLink = field(@row, "FacebookLink")
+  SET @address = field(@row, "Address")
+  SET @venueManager = field(@row, "VenueManager")
+ ELSE
+  
+  /* THIS FUNCTION WILL CANCEL THE EMAIL OR SMS SEND */
+  RaiseError("No row was found")  
+ENDIF
+
+  /*  format FacebookLink  */
+ SET @fbLink = Concat("https://www.",@facebookLink)
+ 
+/* Correct venue name for the signature */
+IF Substring(@venueName, 1, 4) == "The " THEN
+   SET @venueSignature = Concat("Venue Manager, at ", @venueName)
+ELSE
+   SET @venueSignature = Concat("Venue Manager, at the ", @venueName)
+ENDIF
+]%%
+
+Template:<br>
+Welcome to %%=v(@venueName)=%%
+<br><br>
+*** Email Hero Image: ***<br><br>
+<img src="%%=v(@logoURL)=%%" alt="%%=v(@venueName)=%%">
+<br><br>
+Hello %%=v(@firstName)=%%, welcome to %%=v(@venueName)=%%!
+<br>
+We are thrilled to have you with us at %%=v(@venueName)=%%. Our venue offers a unique atmosphere and a variety of events that cater to all tastes. Whether you're here to enjoy a quiet evening with friends, catch the latest sports game, or attend one of our themed nights, we have something for everyone.
+<br><br>
+Here's what you can expect:<br>
+● Exclusive access to our events and promotions.<br>
+● Personalized offers and updates.<br>
+● A vibrant community of fellow patrons.<br>
+<br>
+Address: %%=v(@address)=%%<br>
+Contact us at : %%=v(@phoneNum)=%%<br>
+Follow us on Facebook: <a href="%%=v(@fbLink)=%%" target="_blank">%%=v(@fbLink)=%%</a>
+<br>
+<br>
+We look forward to seeing you soon!<br>
+<br>
+Best regards,<br>
+%%=v(@venueManager)=%%<br>
+%%=v(@venueSignature)=%%
+
+
+<!-- Educational Email:---------------------------------------------------------------------------- -->
+
+%%[
+SET @fName = AttributeValue("FirstName")
+SET @venueID = AttributeValue("VenueID")
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+   SET @firstName = "there"
+ ENDIF
+ 
+ /* Venue FIELDS */
+SET @venueName = Lookup("Venue", "VenueName", "VenueID", @venueID)
+ /* Venue_Events FIELDS */
+SET @rows = LookupRows("Venue_Events", "VenueID", @venueID)
+
+SET @rowCount = rowcount(@rows)
+
+/* CHECKS IF THERE IS A ROW THAT EXISTS */
+ IF @rowCount > 0 THEN
+
+  SET @row = row(@rows,1)
+ 
+  SET @eventName = field(@row, "EventName")
+  SET @eventDate = field(@row, "EventDate")
+  SET @eventDescription = field(@row, "EventDescription")
+  SET @eventURL = field(@row, "EventURL")  
+ ELSE
+  /* THIS FUNCTION WILL CANCEL THE EMAIL OR SMS SEND */
+  RaiseError("No row was found")  
+ENDIF
+
+SET @dateFormat = FormatDate(@eventDate, "MMM dd, YYYY")
+/* REMAINING DAYS CALCULATION */
+SET @systemDate  = Now(1)
+SET @localDate =  SystemDateToLocalDate(@systemDate)
+SET @remainingDays = DATEDIFF(@localDate, @eventDate, "D")
+
+  /*  format URL Link  */
+ SET @urlLink = Concat("https://www.",@eventURL)
+ 
+ /* Correct venue name for the signature */
+IF Substring(@venueName, 1, 4) == "The " THEN
+   SET @venueSignature = Concat(" ", @venueName," Team.")
+ELSE
+   SET @venueSignature = Concat("The ", @venueName," Team.")
+ENDIF
+]%%
+
+Subject Line:<br>
+What's Happening at %%=v(@venueName)=%%: Upcoming Events You Can't Miss!
+<br><br>
+
+Template:<br> 
+
+Upcoming Events at %%=v(@venueName)=%%
+<br> <br>
+Hi %%=v(@firstName)=%%!
+<br> 
+We hope you're enjoying your time with us at %%=v(@venueName)=%%. To make sure you never miss out on the fun, here's a sneak peek at the upcoming event in the next %%=v(@remainingDays)=%% days.
+<br> <br>
+Event: %%=v(@eventName)=%% <br> 
+Date: %%=v(@dateFormat)=%% <br> 
+Description: %%=v(@eventDescription)=%% <br><br>
+
+Mark your calendar and get ready for a fantastic time. Each event is designed to offer you a memorable experience filled with entertainment and camaraderie. <br>
+
+Want to know more about these events or RSVP? <a href="%%=v(@urlLink)=%%" target="_blank">%%=v(@urlLink)=%%</a> for all the details.
+<br>
+We can't wait to see you there!
+<br>
+Cheers, %%=v(@venueSignature)=%%
+
+ 
+<!-- Discount Offer Email:---------------------------------------------------------------------------- -->
+%%[
+SET @fName = AttributeValue("First Name")
+SET @venueID = AttributeValue("VenueID")
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+   SET @greetings = Concat(@firstName, " we have an exclusive offer just for you!")
+ ELSE
+   SET @firstName = "there"
+   SET @greetings = "We have an exclusive offer just for you!"
+ ENDIF
+ 
+ /* Venue FIELDS */
+SET @venueName = Lookup("Venue", "VenueName", "VenueID", @venueID)
+SET @redemptionCode = Lookup("Venue", "VoucherPrefix", "VenueID", @venueID)
+
+ /* Venue_Events FIELDS */
+SET @eventURL = Lookup("Venue_Events", "EventURL", "VenueID", @venueID)
+
+SET @voucherCode = CONCAT(@redemptionCode,"-",@venueID)
+
+ /* Correct venue name for the signature */
+IF Substring(@venueName, 1, 4) == "The " THEN
+   SET @venueSignature = Concat(" ", @venueName," Team.")
+ELSE
+   SET @venueSignature = Concat("The ", @venueName," Team.")
+ENDIF
+
+  /*  format URL Link  */
+ SET @urlLink = Concat("https://www.",@eventURL)
+]%%
+
+Subject Line:<br>
+Exclusive Offer for New Members: Enjoy 20% Off at %%=v(@venueName)=%%!
+
+<br><br>
+
+Template:<br> 
+
+%%=v(@greetings)=%%
+  <br><br>
+Hi %%=v(@firstName)=%%!
+<br>
+As a token of our appreciation for joining us, we're excited to offer you an exclusive discount on your next visit. Enjoy a special 20% off on your next meal or drink at %%=v(@venueName)=%%.
+<br>
+Simply show this email to your server with your unique redemption code %%=v(@voucherCode)=%% to redeem your discount.
+<br><br>
+<a href="%%=v(@urlLink)=%%" target="_blank" style="text-decoration: none;">
+    <div style="width: 100%; display: flex; justify-content: center;">
+    <button type="button" style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Visit the Venue
+    </button>
+</div>
+</a>
+<br><br>
+Thank you for choosing %%=v(@venueName)=%%. We look forward to serving you soon!
+<br><br>
+Cheers, %%=v(@venueSignature)=%%

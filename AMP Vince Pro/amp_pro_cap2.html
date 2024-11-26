@@ -87,3 +87,88 @@ Reactivation Email Campaign
  The TelcoTech Team
  <br> <br> 
  Click unsubscribe to opt out of all marketing communications. 
+
+
+ <!-- Revisado luego de Vince feedback--------------------------------------------------------- -->
+
+ %%[
+SET @fName = AttributeValue("FirstName")
+SET @lastPlanID = AttributeValue("LastPlanID")
+SET @CustomerID = AttributeValue("CustomerID")
+
+IF NOT EMPTY(@fName) THEN
+    SET @firstName = PROPERCASE(TRIM(@fName))
+    SET @subjectLine = Concat(@firstName, ", We Want You Back! 50% Off Just for You! 🚀")
+ELSE
+    SET @firstName = "there"
+    SET @subjectLine = "We Want You Back! 50% Off Just for You! 🚀"
+ENDIF
+
+/* OfferA and OfferB from Plan_Matrix */
+SET @OfferA_PlanID = Lookup("Plan_Matrix", "OfferA", "PlanID", @lastPlanID)
+SET @OfferB_PlanID = Lookup("Plan_Matrix", "OfferB", "PlanID", @lastPlanID)
+
+/* Now use LookupRows to get details for Offer A */
+SET @rowsA = LookupRows("Plan_Matrix", "PlanID", @OfferA_PlanID)
+SET @rowCountA = rowcount(@rowsA)
+
+/* CHECKS IF THERE IS A ROW THAT EXISTS FOR OFFER A */
+IF @rowCountA > 0 THEN
+    SET @rowA = row(@rowsA, 1)
+    SET @PlanNameA = field(@rowA, "PlanName")
+    SET @GB_A = field(@rowA, "GB")
+    SET @PricePerMonth_A = field(@rowA, "PricePerMonth")
+ELSE 
+    RaiseError("No row found for Offer A")  
+ENDIF
+
+/* Now use LookupRows to get details for Offer B */
+SET @rowsB = LookupRows("Plan_Matrix", "PlanID", @OfferB_PlanID)
+SET @rowCountB = rowcount(@rowsB)
+
+/* CHECKS IF THERE IS A ROW THAT EXISTS FOR OFFER B */
+IF @rowCountB > 0 THEN
+    SET @rowB = row(@rowsB, 1)
+    SET @PlanNameB = field(@rowB, "PlanName")
+    SET @GB_B = field(@rowB, "GB")
+    SET @PricePerMonth_B = field(@rowB, "PricePerMonth")
+ELSE 
+    RaiseError("No row found for Offer B")  
+ENDIF
+
+/* Create the reactivation links */
+SET @reactivationLinkA = Concat("https://www.telcotech.com/reactivate?custID=", @CustomerID, "&offerID=", @OfferA_PlanID)
+SET @reactivationLinkB = Concat("https://www.telcotech.com/reactivate?custID=", @CustomerID, "&offerID=", @OfferB_PlanID)
+
+/* Format currency US prices */
+SET @formatPricePerMonth_A = FormatCurrency(@PricePerMonth_A,"en_US")
+SET @formatPricePerMonth_B = FormatCurrency(@PricePerMonth_B,"en_US")
+SET @priceDiscount_A = FormatCurrency(Divide(@PricePerMonth_A, 2),"en_US")
+SET @priceDiscount_B = FormatCurrency(Divide(@PricePerMonth_B, 2),"en_US")
+
+]%%
+
+Hi %%=v(@firstName)=%%,
+<br> <br> 
+We miss you! It's been a while since you've been with us, and we have a special offer just for you. We are offering a <strong>50% discount</strong> on your first 3 renewals if you reactivate your plan with us.
+<br> 
+Based on your last plan, here are two exciting options for you:
+<br> <br> 
+Option 1:<br> 
+● Plan Name: %%=v(@PlanNameA)=%%<br> 
+● Data: %%=v(@GB_A)=%%<br> 
+● Price per Month: %%=v(@priceDiscount_A)=%% for the first 3 renewals, then %%=v(@formatPricePerMonth_A)=%% for remaining renewals.<br> 
+● <a href="%%=v(@reactivationLinkA)=%%">Reactivate Offer 1</a>
+<br> <br>
+Option 2:<br> 
+● Plan Name: %%=v(@PlanNameB)=%%<br> 
+● Data: %%=v(@GB_B)=%%<br> 
+● Price per Month: %%=v(@priceDiscount_B)=%% for the first 3 renewals, then %%=v(@formatPricePerMonth_B)=%% for remaining renewals.<br> 
+● <a href="%%=v(@reactivationLinkB)=%%">Reactivate Offer 2</a><br><br> 
+
+Don't miss out on this great opportunity to come back to TelcoTech and enjoy premium service at an unbeatable price. Click the link below to reactivate your plan and start saving!<br><br>
+
+Best regards,<br>
+The TelcoTech Team
+<br><br>
+<small>Click unsubscribe to opt out of all marketing communications.</small>

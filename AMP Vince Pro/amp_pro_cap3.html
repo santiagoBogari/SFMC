@@ -1,0 +1,80 @@
+%%[
+SET @customerID = AttributeValue("CustomerID")
+SET @fName = AttributeValue("FirstName")
+SET @totalYearlySpend = Lookup("MarketingCustomerView", "TotalYearlySpend", "CustomerID", @customerID)
+SET @avgBasketSize = Lookup("MarketingCustomerView", "AvgBasketSize", "CustomerID", @customerID)
+  
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+   SET @subjectLine = Concat(@firstName,", Happy 1 Year! We Have a Special Gift for You 🎁")
+ ELSE
+    SET @firstName = "there"
+    SET @subjectLine = "Happy 1 Year! We Have a Special Gift for You 🎁"
+ENDIF
+
+
+
+/* Determine discount based on TotalYearlySpend and AvgBasketSize */
+
+IF @totalYearlySpend >= 1000 THEN
+    IF @avgBasketSize >= 50 THEN
+        SET @discount = 20
+        SET @discountRef = "UIT897"
+        SET @message = "A big thank you for being with us for a year! Enjoy 20% off your next purchase. We're thrilled to have you as a loyal customer."
+    ELSEIF @avgBasketSize >= 50 AND @avgBasketSize < 150 THEN
+        SET @discount = 25
+        SET @discountRef = "WEX312"
+        SET @message = "A big thank you for being with us for a year! Enjoy 25% off your next purchase. We're thrilled to have you as a loyal customer."
+    ELSE 
+        SET @discount = 30
+        SET @discountRef = "TTN187"
+        SET @message = "A big thank you for being with us for a year! Enjoy 30% off your next purchase. We're thrilled to have you as a loyal customer."
+    ENDIF
+ELSEIF @totalYearlySpend >= 500 AND @totalYearlySpend < 1000 THEN
+    IF @avgBasketSize < 50 THEN
+        SET @discount = 15
+        SET @discountRef = "POE231"
+        SET @message = "It's been a fantastic year with you! To celebrate, we're giving you 15% off your next purchase. Thank you for choosing FitGear for your sports needs."
+    ELSEIF @avgBasketSize >= 50 AND @avgBasketSize < 150 THEN
+        SET @discount = 20
+        SET @discountRef = "IIO908"
+        SET @message = "It's been a fantastic year with you! To celebrate, we're giving you 20% off your next purchase. Thank you for choosing FitGear for your sports needs."
+    ELSE 
+        SET @discount = 25
+        SET @discountRef = "THN567"
+        SET @message = "It's been a fantastic year with you! To celebrate, we're giving you 25% off your next purchase. Thank you for choosing FitGear for your sports needs."
+    ENDIF
+ELSE 
+    IF @avgBasketSize < 50 THEN
+        SET @discount = 10
+        SET @discountRef = "GTUI90"
+        SET @message = "Thanks for being with us for a year! Enjoy 10% off your next purchase as a token of our appreciation. We hope you continue to find everything you need for your sports and fitness journey."
+    ELSEIF @avgBasketSize >= 50 AND @avgBasketSize < 150 THEN
+        SET @discount = 15
+        SET @discountRef = "TGI782"
+        SET @message = "Thanks for being with us for a year! Enjoy 15% off your next purchase as a token of our appreciation. We hope you continue to find everything you need for your sports and fitness journey."
+    ELSE 
+        SET @discount = 20
+        SET @discountRef = "THP892"
+        SET @message = "Thanks for being with us for a year! Enjoy 20% off your next purchase as a token of our appreciation. We hope you continue to find everything you need for your sports and fitness journey."
+    ENDIF
+ENDIF
+
+/* Create dynamic discount link */
+SET @dynamicLink = Concat("https://www.fitgear.com/redeem?code=",@discountRef)
+
+]%%
+
+Template:<br>
+Hi %%=v(@firstName)=%%,
+<br><br>
+%%=v(@message)=%%
+<br><br>
+Click <a href="%%=RedirectTo(@dynamicLink)=%%">here</a> to redeem your special offer.
+<br><br>
+Thank you for being a valued member of the FitGear family. We look forward to serving you for many more years to come.
+<br><br>
+Best regards,<br>
+FitGear Team
+<br><br>
+<small>Click unsubscribe to opt out of all marketing communications.</small>

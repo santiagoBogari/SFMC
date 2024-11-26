@@ -3,62 +3,225 @@ Practice Assignment: Cyber Monday Travel Promotion (Advanced)
  -->
 
  %%[
- SET @fName = AttributeValue("FirstName")
- SET @prefVacType = AttributeValue("PreferredVacationType")
- SET @customerID = AttributeValue("CustomerID")
- SET @location = AttributeValue("Location")
- SET @tier = AttributeValue("Tier")
+SET @fName = AttributeValue("FirstName")
+SET @prefVacType = AttributeValue("PreferredVacationType")
+SET @customerID = AttributeValue("CustomerID")
+SET @location = AttributeValue("Location")
+SET @tier = AttributeValue("Tier")
+
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+   SET @firstName = "Dear Member"
+ ENDIF 
+ 
+ IF @tier == "VIP" THEN
+   SET @subjectLine = Concat("VIP Cyber Monday Offers Just for You, ", @firstName, "!")
+ ELSEIF @tier == "Gold" THEN
+   SET @subjectLine = Concat("Get Ready, ", @firstName, "! A Silver ", @prefVacType, " This Cyber Monday!")
+ ELSE
+   SET @subjectLine = Concat(@firstName, ", Your Exclusive Gold ", @prefVacType, " Getaway Awaits!")
+ ENDIF
+ 
+ /* Dynamic Loyalty Message */
+ SET @loyaltyPoints = Lookup("CustomerLoyalty", "LoyaltyPoints", "CustomerID", @customerID)
+ SET @lastBookedDestination = Lookup("CustomerLoyalty", "LastBookedDestination", "CustomerID", @customerID)
+ SET @specialPerks = Lookup("CustomerLoyalty", "SpecialPerks", "CustomerID", @customerID)
+  
+ IF @loyaltyPoints > 10000 THEN
+   SET @dynamicLoyaltyMsg = Concat("As one of our top travelers who last visited ", @lastBookedDestination, ", we’re excited to offer you a complimentary: ", @specialPerks, "!")
+ ELSE
+   SET @dynamicLoyaltyMsg = "We appreciate your loyalty and can’t wait to see where your next adventure takes you! "
+ ENDIF
+ 
+ /* Perk Information */
+ SET @perkName = Lookup("TravelPerks", "PerkName", "Tier", @Tier)
+ SET @perkDescription = Lookup("TravelPerks", "PerkDescription", "Tier", @tier)
+
+ 
+ /* Destination */
+  SET @destinationName = Lookup("TopDestinations", "DestinationName", "VacationType", @prefVacType)
+  SET @description = Lookup("TopDestinations", "Description", "VacationType", @prefVacType)
+ 
+ /* Set up countdown timer */
+ SET @now = Now()
+ SET @endDateTime = DateParse("2024-12-02 23:59:59")
+ SET @hoursLeft = DateDiff(@now, @endDateTime, "H")
+ 
+ /* Personalized Discount Code */
+ SET @discountCode = Concat("CYBER",@customerID,@destinationName)
  
  
-  IF NOT EMPTY(@fName) THEN
-    SET @firstName = PROPERCASE(TRIM(@fName))
+ /* Link & Discount */
+ SET @promoLink = Lookup("TopDestinations", "PromoLink", "VacationType", @prefVacType)
+ SET @discount = Lookup("TopDestinations", "Discount", "VacationType", @prefVacType)
+]%%
+
+%%=v(@subjectLine)=%%
+
+Hi %%=v(@firstName)=%%,<br><br>
+
+Get ready for your perfect escape this Cyber Monday!<br> Here’s a special offer tailored just for you:<br><br>
+Your Top Pick:<br> %%=v(@destinationName)=%% 
+~ %%=v(@description)=%% <br>
+<br><br>
+Enjoy %%=v(@discount)=%% off! Use code %%=v(@discountCode)=%%
+<br><br>
+Exclusive Perk for Our %%=v(@tier)=%% Members:<br>
+● %%=v(@perkName)=%% - %%=v(@perkDescription)=%%
+<br><br>
+%%=v(@dynamicLoyaltyMsg)=%%
+<br><br>
+Act now – only %%=v(@hoursLeft)=%% hours left to claim this offer!<br><br>
+<a href="%%=v(@promoLink)=%%">Book Your Getaway Now</a>
+Safe travels,<br>
+TravelMeNow Company
+
+<!-- -----------------------------------------Vince solution -->
+
+<!-- <script runat="server" language="ampscript"> -->
+
+  /* RETRIEVING FIELDS FROM SENDING DE */
+  
+  SET @firstName = [FirstName]
+  SET @tier = [Tier]
+  SET @preferredVacationType = [PreferredVacationType]
+  SET @customerID = [CustomerID]
+  
+  /* FIRST NAME - LOGIC */
+  
+  IF NOT EMPTY(@firstName) THEN
+    SET @firstNameTrimmed = Trim(@firstName)
+    SET @firstNamePropercased = Propercase(@firstNameTrimmed)
+    SET @firstNameFinal = @firstNamePropercased
   ELSE
-    SET @firstName = "Member"
+    SET @firstNameFinal = "there"
   ENDIF
   
+  
+  /* DYNAMIC SUBJECT LINE - LOGIC */
+  
+  /* VIP */  
   IF @tier == "VIP" THEN
-    SET @subjectLine = Concat("VIP Cyber Monday Offers Just for You, ", @firstName, "!")
+  
+    IF NOT EMPTY(@firstName) THEN
+      SET @subjectLine = CONCAT("VIP Cyber Monday Offers Just for You, ", @firstNameFinal, "!")
+    ELSE
+      SET @subjectLine = "VIP Cyber Monday Offers Just for You!"
+    ENDIF
+  
+  /* Gold */  
   ELSEIF @tier == "Gold" THEN
-    SET @subjectLine = Concat("Get Ready, ", @firstName, "! A Silver ", @prefVacType, " This Cyber Monday!")
+  
+    IF NOT EMPTY(@firstName) THEN
+      SET @subjectLine = CONCAT(@firstNameFinal, ", Your Exclusive Gold ", @preferredVacationType, " Getaway Awaits!")
+    ELSE
+      SET @subjectLine = CONCAT("Your Exclusive Gold ", @preferredVacationType, " Getaway Awaits!")
+    ENDIF
+  
+  /* Silver */
   ELSE
-    SET @subjectLine = Concat(@firstName, ", Your Exclusive Gold ", @prefVacType, " Getaway Awaits!")
+    
+    IF NOT EMPTY(@firstName) THEN
+      SET @subjectLine = CONCAT("Get Ready, ", @firstNameFinal, "! A Silver ", @preferredVacationType, " This Cyber Monday!")
+    ELSE
+      SET @subjectLine = CONCAT("Get Ready! A Silver ", @preferredVacationType , " This Cyber Monday!")
+    ENDIF
+  
   ENDIF
   
-  /* Dynamic Loyalty Message */
+  
+  /* DYNAMIC LOYALTY MESSAGE - LOGIC */
+  
+  /* LOOK UP FUNCTION - LOYALTY POINTS */
   SET @loyaltyPoints = Lookup("CustomerLoyalty", "LoyaltyPoints", "CustomerID", @customerID)
   
-  IF @loyaltyPoints > 10000 THEN
-    SET @dynamicLoyaltyMsg = "As one of our top travelers who last visited <Last Book Destination>, we’re excited to offer you a complimentary: <Special Perk>! "
-  ELSE
-    SET @dynamicLoyaltyMsg = "We appreciate your loyalty and can’t wait to see where your next adventure takes you! "
-  ENDIF
+  /* LOOK UP FUNCTION - LAST BOOKED DESTINATION */
+  SET @lastBookedDestination = Lookup("CustomerLoyalty", "LastBookedDestination", "CustomerID", @customerID)
+  
+  /* LOOK UP FUNCTION - SPECIAL PERKS */
+  SET @specialPerks = Lookup("CustomerLoyalty", "SpecialPerks", "CustomerID", @customerID)
   
   
-  /* Destination */
-   SET @destinationName = Lookup("TopDestinations", "DestinationName", "VacationType", @prefVacType)
-   SET @description = Lookup("TopDestinations", "Description", "VacationType", @prefVacType)
+  /* PERKS LIST - LOGIC */
   
-  /* Set up countdown timer */
-  SET @now = Now()
-  SET @endDateTime = DateParse("2024-12-02 23:59:59")
-  SET @hoursLeft = DateDiff(@now, @endDateTime, "H")
+  /* LOOK UP FUNCTION - PERK NAME */
+  SET @perkName = Lookup("TravelPerks", "PerkName", "Tier", @tier)
   
- ]%%
- 
- Hi %%=v(@firstName)=%%,<br><br>
- 
- Get ready for your perfect escape this Cyber Monday! Here’s a special offer tailored just for you:<br>
- Your Top Pick: %=v(@destinationName)=% <br>
- ~ %=v(@description)=% <br>
- <br><br>
- Enjoy -discount- off! Use code -discount code=""-
- <br><br>
- Exclusive Perk for Our %%=v(@tier)=%% Members:
- ● -tier perk=""-
- <br><br>
- %%=v(@dynamicLoyaltyMsg)=%%
- <br><br>
- Act now – only %%=v(@hoursLeft)=%% hours left to claim this offer!<br>
- <a href="">Book Your Getaway Now</a>
- Safe travels,<br>
- TravelMeNow Company
+  /* LOOK UP FUNCTION - PERK DESCRIPTION */
+  SET @perkDescription = Lookup("TravelPerks", "PerkDescription", "Tier", @tier)
+  
+  
+  /* PERSONALIZED DISCOUNT CODE - LOGIC */
+  
+  /* LOOK UP FUNCTION - DESTINATION NAME */
+  SET @destinationName = Lookup("TopDestinations", "DestinationName", "VacationType", @preferredVacationType)
+  
+  /* CREATING DISCOUNT CODE */
+  SET @destNameCode = REPLACE(@destinationName, " ", "")
+  SET @discountCode = Concat("CYBER", @customerID, @destNameCode)
+  
+  
+  /* COUNTDOWN TIMER - LOGIC */
+  
+  /* CALCULATE CURRENT DATE */
+  SET @systemDate = Now(1)
+  SET @currentDate = SystemDateToLocalDate(@systemDate)
+  
+  /* HOURS UNTIL CAMPAIGN ENDS - LOGIC */
+  
+  SET @campaignEndDateAndTime = "2024-12-02 23:59:59"
+  SET @hoursUntilCampaignEnds = DateDiff(@currentDate, @campaignEndDateAndTime, "H")
+  
+  
+  /* TOP DESTINATIONS CONTENT - LOGIC */
+  
+  /* LOOK UP FUNCTION - DESTINATION NAME */
+  SET @destinationName = Lookup("TopDestinations", "DestinationName", "VacationType", @preferredVacationType)
+  
+  /* LOOK UP FUNCTION - DESCRIPTION */
+  SET @description = Lookup("TopDestinations", "Description", "VacationType", @preferredVacationType)
+  
+  /* LOOK UP FUNCTION - DISCOUNT */
+  SET @discount = Lookup("TopDestinations", "Discount", "VacationType", @preferredVacationType)
+  
+  /* LOOK UP FUNCTION - PROMO LINK */
+  SET @promoLink = Lookup("TopDestinations", "PromoLink", "VacationType", @preferredVacationType)
+  
+<!--   </script> -->
+  
+  
+  
+  
+  
+  Input the variables into the template below.
+  Subject Line:
+  
+  <dynamic subject line>
+  
+  
+  
+  
+  Template:
+  Hi %%=v(@firstNameFinal)=%%,
+  
+  Get ready for your perfect escape this Cyber Monday! Here’s a special offer tailored just for you:
+  Your Top Pick: %%=v(@destinationName)=%%
+  ~ %%=v(@description)=%%
+  
+  Enjoy %%=v(@discount)=%%% off! Use code %%=v(@discountCode)=%%
+  
+  Exclusive Perk for Our %%=v(@tier)=%% Members:
+  %%=v(@perkName)=%% (%%=v(@perkDescription)=%%)
+  
+  %%[IF @loyaltyPoints > 10000 THEN]%%
+  As one of our top travelers who last visited %%=v(@lastBookedDestination)=%%, we’re excited to offer you a complimentary: %%=v(@specialPerks)=%%! 
+  %%[ELSE]%%
+  We appreciate your loyalty and can’t wait to see where your next adventure takes you! 
+  %%[ENDIF]%%
+  
+  Act now – only %%=v(@hoursUntilCampaignEnds)=%% hours left to claim this offer!
+  <a href="%%=RedirectTo(@promoLink)=%%">Book Your Getaway Now</a>
+  Safe travels,
+  TravelMeNow Company  
