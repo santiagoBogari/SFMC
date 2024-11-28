@@ -1,3 +1,7 @@
+<!-- Capstone 3: Anniversary Campaign -->
+
+<!-- Email -->
+
 %%[
 SET @customerID = AttributeValue("CustomerID")
 SET @fName = AttributeValue("FirstName")
@@ -10,14 +14,12 @@ SET @avgBasketSize = Lookup("MarketingCustomerView", "AvgBasketSize", "CustomerI
  ELSE
     SET @firstName = "there"
     SET @subjectLine = "Happy 1 Year! We Have a Special Gift for You 🎁"
-ENDIF
+ ENDIF
 
-
-
-/* Determine discount based on TotalYearlySpend and AvgBasketSize */
+/* Discount based on TotalYearlySpend and AvgBasketSize */
 
 IF @totalYearlySpend >= 1000 THEN
-    IF @avgBasketSize >= 50 THEN
+    IF @avgBasketSize < 50 THEN
         SET @discount = 20
         SET @discountRef = "UIT897"
         SET @message = "A big thank you for being with us for a year! Enjoy 20% off your next purchase. We're thrilled to have you as a loyal customer."
@@ -60,12 +62,13 @@ ELSE
     ENDIF
 ENDIF
 
-/* Create dynamic discount link */
+/* Dynamic discount link */
 SET @dynamicLink = Concat("https://www.fitgear.com/redeem?code=",@discountRef)
 
 ]%%
 
-Template:<br>
+Template:
+<br><br>
 Hi %%=v(@firstName)=%%,
 <br><br>
 %%=v(@message)=%%
@@ -78,3 +81,81 @@ Best regards,<br>
 FitGear Team
 <br><br>
 <small>Click unsubscribe to opt out of all marketing communications.</small>
+
+
+<!-- SMS -->
+
+%%[
+SET @customerID = AttributeValue("CustomerID")
+SET @fName = AttributeValue("FirstName")
+SET @totalYearlySpend = Lookup("MarketingCustomerView", "TotalYearlySpend", "CustomerID", @customerID)
+SET @avgBasketSize = Lookup("MarketingCustomerView", "AvgBasketSize", "CustomerID", @customerID)
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+    SET @firstName = "there"
+ ENDIF
+
+/* SMS message variables */
+        
+       IF @totalYearlySpend >= 1000 THEN
+    IF @avgBasketSize < 50 THEN
+        SET @discount = 20
+        SET @discountRef = "UIT897"
+        SET @message = "Happy 1-Year Anniversary with FitGear! Thanks for your small but mighty purchases!"
+    ELSEIF @avgBasketSize >= 50 AND @avgBasketSize < 150 THEN
+        SET @discount = 25
+        SET @discountRef = "WEX312"
+        SET @message = "Happy 1-Year Anniversary with FitGear! We appreciate your consistent support!"
+    ELSE 
+        SET @discount = 30
+        SET @discountRef = "TTN187"
+        SET @message = "Happy 1-Year Anniversary with FitGear! You're one of our top spenders!"
+    ENDIF
+ELSEIF @totalYearlySpend >= 500 AND @totalYearlySpend < 1000 THEN
+    IF @avgBasketSize < 50 THEN
+        SET @discount = 15
+        SET @discountRef = "POE231"
+        SET @message = "Happy 1-Year Anniversary with FitGear! Thanks for your small but mighty purchases!"
+    ELSEIF @avgBasketSize >= 50 AND @avgBasketSize < 150 THEN
+        SET @discount = 20
+        SET @discountRef = "IIO908"
+        SET @message = "Happy 1-Year Anniversary with FitGear! We appreciate your consistent support!"
+    ELSE 
+        SET @discount = 25
+        SET @discountRef = "THN567"
+        SET @message = "Happy 1-Year Anniversary with FitGear! You're one of our top spenders!"
+    ENDIF
+ELSE 
+    IF @avgBasketSize < 50 THEN
+        SET @discount = 10
+        SET @discountRef = "GTUI90"
+        SET @message = "Happy 1-Year Anniversary with FitGear! Thanks for your small but mighty purchases!"
+    ELSEIF @avgBasketSize >= 50 AND @avgBasketSize < 150 THEN
+        SET @discount = 15
+        SET @discountRef = "TGI782"
+        SET @message = "Happy 1-Year Anniversary with FitGear! We appreciate your consistent support!"
+    ELSE 
+        SET @discount = 20
+        SET @discountRef = "THP892"
+        SET @message = "Happy 1-Year Anniversary with FitGear! You're one of our top spenders!"
+    ENDIF
+ENDIF
+
+/* Dynamic BITLY link */
+SET @bLink = Concat("https://www.fitgear.com/",@discountRef)
+SET @smsMessage = Concat("Hi ",@firstName,", ",@message," Enjoy ",@discount, "% off your next purchase. Your offer link: ",@bLink)
+]%%
+
+%%=v(@smsMessage)=%%
+Reply back STOP to opt out.
+
+
+
+<!-- /* Dynamic BITLY link */
+SET @bLink = Concat("https://www.fitgear.com/",@discountRef)
+SET @bitlyLink = Concat("<a href='", @bLink, "'>", @bLink, "</a>")
+
+SET @smsMessage = Concat("Hi ",@firstName,", ",@message," Enjoy ",@discount, "% off your next purchase.Click here: ",@bitlyLink)
+ -->
