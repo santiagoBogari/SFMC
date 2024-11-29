@@ -174,3 +174,89 @@ For more information, contact us at 108091892 to speak to one of our product spe
 <br><br>
 Regards,<br>
 The SecureBank Team
+
+
+<!-- con las correcciones de Vince -->
+
+%%[
+SET @customerID = AttributeValue("CustomerID")
+SET @fName = AttributeValue("FirstName")
+SET @preferenceCategory = AttributeValue("PreferenceCategory")
+SET @thisMonth = Format(Now(), 'MMMM')
+
+IF NOT EMPTY(@fName) THEN
+    SET @firstName = PROPERCASE(TRIM(@fName))
+    SET @subjectLine = Concat(@firstName, ", check out the latest news in the ", @thisMonth, " Monthly Newsletter!")
+ELSE
+    SET @firstName = "there"
+    SET @subjectLine = Concat("Check out the latest news in the ", @thisMonth, " Monthly Newsletter!")
+ENDIF 
+
+/* Check if the customer has a preference */
+IF NOT EMPTY(@preferenceCategory) THEN
+
+    SET @contentRows = LookupRows("Newsletter_Content_Data", "Category", @preferenceCategory)
+
+    /* Check if content exists for the given preference */
+    IF RowCount(@contentRows) > 0 THEN
+       
+        SET @article = Row(@contentRows, 1)
+        SET @article1Title = Field(@article, "Article1Title")
+        SET @article1Description = Field(@article, "Article1Description")
+        SET @article1Link = Field(@article, "Article1Link")
+        SET @article1ImageURL = Field(@article, "Article1ImageURL")
+
+        SET @article2Title = Field(@article, "Article2Title")
+        SET @article2Description = Field(@article, "Article2Description")
+        SET @article2Link = Field(@article, "Article2Link")
+        SET @article2ImageURL = Field(@article, "Article2ImageURL")
+
+        SET @article3Title = Field(@article, "Article3Title")
+        SET @article3Description = Field(@article, "Article3Description")
+        SET @article3Link = Field(@article, "Article3Link")
+        SET @article3ImageURL = Field(@article, "Article3ImageURL")
+
+        IF @preferenceCategory == "Home Loans" THEN
+            SET @message = "As someone interested in Home Loans, we've curated some articles just for you. Check out our latest insights and tips to help you make the best decisions for your home financing needs."
+        ELSEIF @preferenceCategory == "Credit Cards" THEN
+            SET @message = "We've noticed your interest in Credit Cards. Here are the latest updates and tips on how to maximize your credit card benefits and manage your finances effectively."
+        ELSEIF @preferenceCategory == "Long Term Investment" THEN
+            SET @message = "For those interested in Long Term Investments, we have gathered some expert advice and strategies to help you plan your future with confidence."
+        ELSEIF @preferenceCategory == "Term Deposits" THEN
+            SET @message = "If you're considering Term Deposits, we have some valuable information and comparisons to help you secure your financial future."
+        ELSEIF @preferenceCategory == "Short Term Investment" THEN
+            SET @message = "Short Term Investments can be a great way to grow your wealth quickly. Here are some quick strategies and comparisons to help you get started."
+        ENDIF
+
+    ELSE
+        RaiseError("No content available for this preference category.", false)
+    ENDIF
+
+ELSE
+    RaiseError("No preference data available for this customer.", false)
+ENDIF
+]%%
+
+Hi %%=v(@firstName)=%%,<br><br>
+
+%%=v(@message)=%%<br><br>
+
+<img src="%%=v(@article1ImageURL)=%%" alt="%%=v(@article1Title)=%%" style="width: 100%; height: auto;">
+<h2>%%=v(@article1Title)=%%</h2>
+<p>%%=v(@article1Description)=%%</p>
+<a href="%%=RedirectTo(@article1Link)=%%" style="color: blue;">Read more</a>
+
+<img src="%%=v(@article2ImageURL)=%%" alt="%%=v(@article2Title)=%%" style="width: 100%; height: auto;">
+<h2>%%=v(@article2Title)=%%</h2>
+<p>%%=v(@article2Description)=%%</p>
+<a href="%%=RedirectTo(@article2Link)=%%" style="color: blue;">Read more</a>
+
+<img src="%%=v(@article3ImageURL)=%%" alt="%%=v(@article3Title)=%%" style="width: 100%; height: auto;">
+<h2>%%=v(@article3Title)=%%</h2>
+<p>%%=v(@article3Description)=%%</p>
+<a href="%%=RedirectTo(@article3Link)=%%" style="color: blue;">Read more</a>
+<br><br>
+For more information, contact us at 108091892 to speak to one of our product specialists.
+<br><br>
+Regards,<br>
+The SecureBank Team
