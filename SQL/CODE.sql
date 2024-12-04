@@ -79,15 +79,15 @@ INNER JOIN (
         X.amount,
         X.order_id  -- Ensure this column is included
     FROM (
-        SELECT 
-            customer_id,
-            date,
-            amount,
-            order_id,  -- Include order_id in this inner query
-            ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY date DESC) AS RowNum    
-        FROM 
-            [NextMobile_Orders] nxtOrders 
-    ) AS X
+				SELECT 
+					customer_id,
+					date,
+					amount,
+					order_id,  -- Include order_id in this inner query
+					ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY date DESC) AS RowNum    
+				FROM 
+					[NextMobile_Orders] nxtOrders 
+   		 ) AS X
     WHERE 
         X.RowNum = 1
 ) AS NMO ON nxtUsers.id = NMO.customer_id;
