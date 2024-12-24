@@ -1,0 +1,47 @@
+
+<!-- AMPscript  LookUp -->
+
+SET @Key1 = [KeyFieldName1]
+
+/* LOOK UP FUNCTION */
+SET @FieldNameToRetrieve = Lookup("<DENameToLookUp>", "<FieldNameInLookUpDEToRetrieve>", "<FieldNameInLookUpDEKey1>", @Key1)
+
+<!--  -->
+Lookup( "[Data Extension Name]", "[Column to Retrieve]", "[Column to Identify Row]", "[Value to Identify Row]", "[a]", "[b]" )
+
+
+
+
+<!-- AMPscript  LookUpRows-->
+
+SET @Key1 = [KeyFieldName1]
+SET @rows = LookupRows("<DENameToLookUp>", "<FieldNameInLookUpDEKey1>", @Key1)
+
+SET @rowCount = rowcount(@rows)
+
+/* CHECKS IF THERE IS A ROW THAT EXISTS */
+IF @rowCount > 0 THEN
+
+  SET @row = row(@rows,1)
+  /* IF YOU WANT TO RETRIEVE MORE THAN 3 FIELDS, ADD MORE ROWS AS PER BELOW */
+  /* IF YOU WANT TO RETRIEVE LESS THAN 3 FIELDS, REMOVE ROWS AS PER BELOW */
+  SET @FieldName1 = field(@row, "FieldName1")
+  SET @FieldName2 = field(@row, "FieldName2")
+  SET @FieldName3 = field(@row, "FieldName3")
+
+/* IF THE ROW DOES NOT EXIST */
+ELSE
+  
+  /* THIS FUNCTION WILL CANCEL THE EMAIL OR SMS SEND */
+  RaiseError("No row was found")  
+
+ENDIF
+
+
+
+<!-- InsertData()  (CloudPages, landing pages, microsites, and SMS messages in Mobile Connect. Use the InsertDE() function to insert rows into a data extension from emails.) -->
+InsertData(dataExt,
+           columnName1, valueToInsert1,
+           [columnName2, valueToInsert2 ...])
+
+<!--  -->           
