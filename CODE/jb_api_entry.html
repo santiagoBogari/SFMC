@@ -1,0 +1,50 @@
+<!-- Journey Builder API Entry Event in Salesforce Marketing Cloud -->
+<!-- https://www.youtube.com/watch?v=vSxESMOlnaI&list=PLYjAMqKETE1o75i5EIyYgcrp0O4nf0o-V&index=3 --> 
+
+<!-- Landing Page  -->
+%%=contentblockbyid("297833")=%%
+
+<!-- HTML BLOCK -->
+
+<script runat="server">
+    Platform.Load("Core", "1");
+    
+    try {
+        
+      var payload = {
+        "grant_type": "client_credentials",
+        "client_id": "nhezn540d162lm88rxbb52a9",
+        "client_secret": "9vMSyW1txO2AeijeQBhzAQGj"
+    };
+    var authurl = "https://mcq2jm4xdl2dtzz0jdfmk7mf8-b4.auth.marketingcloudapis.com/v2/token";
+    var result = HTTP.Post(authurl, 'application/json', Stringify(payload));
+      
+    if (result.StatusCode == 200) {
+        var responseJson = Platform.Function.ParseJSON(result.Response[0]);
+        var accessToken = responseJson.access_token;
+        var restUrl = responseJson.rest_instance_url;
+    } else {
+        throw new Error("Error fetching access token");
+    }
+    Write(result.Response[0]+"<br>"); //payload response
+    Write(accessToken); //token
+      
+    var journeypayload = {
+        "ContactKey": "SampleRows_0059866904312a24e23",
+        "EventDefinitionKey": "APIEvent-a808f031-4680-5305-f39b-7632972516ed",
+        "Data": {
+            "SubscriberKey": "SampleRows_0059866904312a24e23",
+            "EmailAddress": "max@salesforce.com",
+            "Name": "Jon",
+            "Other": "Congrats again!"
+        }
+    
+    };  
+      
+      var fireevent = HTTP.Post(restUrl+"interaction/v1/events", 'application/json', Stringify(journeypayload),["Authorization"],["Bearer "+accessToken]);
+      Write(Stringify(fireevent));
+      
+    } catch (error) {
+        Write('Message: ' + error.message);
+    }
+    </script>
