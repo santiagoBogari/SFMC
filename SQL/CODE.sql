@@ -91,3 +91,37 @@ INNER JOIN (
     WHERE 
         X.RowNum = 1
 ) AS NMO ON nxtUsers.id = NMO.customer_id;
+
+
+/* Marketing Cloud Mondays - Hands-On Building Session */
+
+SELECT 
+CONCAT(first_name, last_name,RIGHT(Email, LEN(Email) - CHARINDEX('@', Email )+1)) AS SubscriberKey 
+, first_name 
+, last_name 
+, Email AS CommunityEmail 
+, Company 
+, Title 
+, RIGHT(Email, LEN(Email) - CHARINDEX('@', Email )) AS Email_Domain , created_date AS Member_Join_Date
+
+FROM Community_Members 
+WHERE Email IS NOT NULL GROUP BY LAST_NAME
+
+/*  */
+
+SELECT DISTINCT CONCAT(first_name, last_name,RIGHT(Email, LEN(Email) - CHARINDEX('@', Email )+1)) AS SubscriberKey , MAX(first_name) AS first_name , MAX(last_name) AS last_name , MAX(Email) AS CommunityEmail , MAX(Company) AS Company , MAX(Title) AS Title , MAX(RIGHT(Email, LEN(Email) - CHARINDEX('@', Email ))) AS Email_Domain , MIN(created_date) AS [Member_Join_Date]
+
+FROM Community_Members WHERE Email IS NOT NULL GROUP BY CONCAT(first_name, last_name,RIGHT(Email, LEN(Email) - CHARINDEX('@', Email )+1))
+
+/*  */
+SELECT DISTINCT CONCAT(CM.first_name, CM.last_name,RIGHT(CM.Email, LEN(CM.Email) - CHARINDEX('@', CM.Email )+1)) AS SubscriberKey , MAX(CM.first_name) AS first_name , MAX(CM.last_name) AS last_name , MAX(CM.Email) AS CommunityEmail , MAX(CM.Company) AS Company , MAX(CM.Title) AS Title , MAX(RIGHT(CM.Email, LEN(CM.Email) - CHARINDEX('@', CM.Email ))) AS Email_Domain , MIN(CM.created_date) AS [Member_Join_Date] , MIN(CA.SignUpDate) AS SignUpDate , MIN(CA.CheckinDate) AS CheckinDate
+
+FROM Community_Members AS CM LEFT JOIN CommunityAttendee AS CA ON CONCAT(CM.first_name, CM.last_name,RIGHT(CM.Email, LEN(CM.Email) - CHARINDEX('@', CM.Email )+1)) = CONCAT(CA.first_name, CA.last_name,RIGHT(CA.Email, LEN(CA.Email) - CHARINDEX('@', CA.Email )+1))
+
+WHERE CM.Email IS NOT NULL AND CA.SignUpDate IS NOT NULL GROUP BY CONCAT(CM.first_name, CM.last_name,RIGHT(CM.Email, LEN(CM.Email) - CHARINDEX('@', CM.Email )+1))
+
+
+
+
+
+
