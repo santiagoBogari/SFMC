@@ -195,3 +195,75 @@ AND         (
                 
                 (Member.LoyaltyTier IN ('Gold', 'Platinum') AND Member.BalancePoints > 500)
             )
+
+
+ /* VINCE CODE*/
+ SELECT 
+Member.MemberID, 
+Member.FirstName, 
+Member.LastName, 
+Member.Email, 
+Member.LoyaltyTier, 
+Member.BalancePoints, 
+Member.JoinedDate, 
+Member.PreferredPropertyID, 
+MPref.EmailOptIn, 
+MPref.InterestPreference, 
+/*Transaction Fields*/
+LatestTxn.TransactionDate AS Latest_Txn_Date, 
+LatestTxn.TransactionAmount AS Latest_Txn_Amount, 
+LatestTxn.PropertyID AS Latest_Txn_PropertyID, 
+CASE 
+    WHEN LatestTxn.MemberID IS NOT NULL THEN 1
+    ELSE 0
+END AS Has_Transacted,   
+
+Property.PromotionalOffer, 
+Property.PromoCode
+
+
+FROM [Members_DE] Member
+INNER JOIN [MemberPreferences_DE] MPref
+                    ON M.MemberID = MPref.MemberID
+                    
+LEFT JOIN ( SELECT X.* 
+            FROM(
+		SELECT	MemberID,
+	          	TransactionDate,
+	          	TransactionAmount,
+	          	PropertyID,
+	          	ROW_NUMBER() OVER (PARTITION BY MemberID
+						ORDER BY TransactionDate DESC) AS RowNum
+		FROM    [Transactions_DE]            
+	) X                    
+         WHERE X.RowNum = 1           
+                    )LatestTxn
+                    ON Member.MemberID = LatestTxn.MemberID
+
+INNER JOIN [Properties_DE] Property     
+    ON Member.PreferredPropertyID = Property.PropertyID
+                    
+WHERE  /*Excluding customers that are opted out */
+            MPref.EmailOptIn = 1
+AND
+/*Not an excluded member*/
+        NOT EXISTS (SELECT 1
+                    FROM [Exclusions_DE] Excluded
+                    WHERE Member.MemberID = Excluded.MemberID)
+       AND
+       /*Have not redeemed any offers in the last 3 months*/
+        NOT EXISTS (SELECT 1
+                     FROM [OfferRedemptions_DE] OfferRed
+                    WHERE M.MemberID = OfferRed.MemberID
+                    AND OfferRed.RedemptionDate >= DATEADD(month, -3, GETDATE())
+
+AND (
+        (Member.LoyaltyTier IN ('Bronze','Silver') 
+        AND 
+        Member.JoinedDate >= DATEADD(year, -1, GETDATE())
+        OR
+        (Member.LoyaltyTier IN ('Gold','Platinum') 
+        AND
+        Member.BalancePoints > 500
+        ))
+                   

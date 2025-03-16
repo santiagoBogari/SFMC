@@ -75,3 +75,7 @@ AND CS.Emailaddress IS NOT NULL
 GROUP BY CONCAT(CM.first_name, CM.last_name,RIGHT(CM.Email, LEN(CM.Email) - CHARINDEX('@', CM.Email )+1))
 
 /*  */
+SELECT TOP 5000
+customer_id, date
+FROM NextMobile_Orders 
+WHERE date >= DATEADD(YEAR, -1, GETDATE()) ORDER BY date DESC
