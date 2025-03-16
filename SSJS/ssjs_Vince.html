@@ -1,0 +1,98 @@
+<!--  -->
+
+<script runat="server">
+
+     var email = "[sample6@email.com](mailto:sample6@email.com)";
+     
+     var userData = Platform.Function.Lookup("LhIlthhF", "first_name", "email", email);
+     
+     Platform.Response.Write("First Name: "+ userData);
+     
+     </script>
+
+<!--  -->
+
+<script runat="server">
+
+    var tier = "Gold";
+     var dataRows = Platform.Function.LookupRows('Sample Customer DE','membership_tier', tier);
+     if(dataRows && dataRows.length > 0) {
+          for(var i=0; i<dataRows.length; i++) {
+               Platform.Response.Write(dataRows[i]["first_name"]+"<br>");
+          }
+     }
+</script>
+
+<!--  -->
+
+<script runat="server">
+
+     Platform.Load("Core", "1");
+     
+    var customerDE = DataExtension.Init("F59C392B-8D0C-47ED-A584-21D5A3282346");
+    var filter = {Property:"Status",SimpleOperator:"equals",Value:"Active"};
+    var data = customerDE.Rows.Retrieve(filter);
+   
+   for(var row in data){
+     Write("Name: " + data[row].first_name + "<br>");
+   }
+   
+   //Write(Stringify(data));
+ </script>
+
+ <!--  -->
+
+ <script runat="server">
+
+     Platform.Load("Core", "1");
+     
+    var customerDE = DataExtension.Init("F59C392B-8D0C-47ED-A584-21D5A3282346");
+    var filter = {Property:"membership_tier",SimpleOperator:"equals",Value:"Gold"};
+    var data = customerDE.Rows.Retrieve(filter);
+   
+   for(var row in data){
+     
+     if(data[row].Status == "Active"){
+   Write("Name is Active: " + data[row].first_name + "<br>");
+ }else{
+ Write("Name is Inactive: " + data[row].first_name + "<br>");
+ };
+      }  
+   //Write(Stringify(data));
+ </script>
+
+ <!-- Complex Filter -->
+
+ <script runat="server">
+
+     Platform.Load("Core", "1");
+     
+    var customerDE = DataExtension.Init("F59C392B-8D0C-47ED-A584-21D5A3282346");
+ var complexfilter = {
+                 LeftOperand:{
+                     Property:"membership_tier",
+                     SimpleOperator:"equals",
+                     Value:"Gold"
+                 },
+                 LogicalOperator:"AND",
+                 RightOperand:{
+                     Property:"balance_points",
+                     SimpleOperator:"greaterThan",
+                     Value:"100"
+         }};
+ var data = customerDE.Rows.Retrieve(complexfilter);
+   
+   for(var row in data){
+     
+     if(data[row].balance_points > "100"){
+   Write("Name is Active: " + data[row].first_name + "<br>");
+ }else{
+ Write("Name is Inactive: " + data[row].first_name + "<br>");
+ };
+    }; 
+   
+   //Write(Stringify(data));
+ </script>
+
+
+ <!--SSJS Upsert Insert -->
