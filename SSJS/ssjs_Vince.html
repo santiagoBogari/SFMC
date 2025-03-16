@@ -1,3 +1,25 @@
+<!-- SSJS Starter Snippets -->
+
+<!-- Using Core Library -->
+
+<script runat="server"> 
+
+  // Load Core Library
+  Platform.Load("Core", "1"); 
+  
+  Write("Hello from Core Library!"); 
+
+</script>
+
+<!-- Using Platform Library -->
+
+<script runat="server">
+  Platform.Response.Write("Hello from Platform Library!");
+</script>
+
+
+<!--  -->
+<!--  -->
 <!--  -->
 
 <script runat="server">
@@ -95,4 +117,132 @@
  </script>
 
 
- <!--SSJS Upsert Insert -->
+ <!--InsertData (Cloudpage) -->
+ <script runat="server">
+  var response = Platform.Function.InsertData("Sample Customer DE",
+                                              ["ContactKey","email","first_name", "balance_points","membership_tier","Status"],
+                                              [111, "clark@pooja.com", "Cee", 2233, "Gold", "Active"]);
+   
+Platform.Response.Write(response);   
+</script>
+
+
+<!-- UpdateData (Cloudpage) -->
+<script runat="server">
+  Platform.Load("core", "1");
+  try {
+    var result = Platform.Function.UpdateData("Sample Customer DE",
+                                              ["ContactKey"],
+                                              [111],
+                                              ["membership_tier"],
+                                              ["Diamond"]);
+    Write(Stringify(result));
+  } catch(e) {
+    Write(Stringify(e));
+  };
+  
+  Platform.Response.Write(response);  
+</script>
+
+
+
+<!-- update/insert or ADD -->
+
+
+<script runat="server"> 
+  
+  var email = "alex@pooja.com"
+  
+  // data to update/insert
+  var contactKey = "933"
+  var first_name = "Alex" 
+  var balance_points = 4466
+  var membership_tier = "Crystal"
+  var status = "Active"
+  
+  // Load Core Library
+  Platform.Load("Core", "1"); 
+  // Initialing DE
+  var dataExt = DataExtension.Init("F59C392B-8D0C-47ED-A584-21D5A3282346");
+  //Lookup email (primary key in this case)
+  var data = dataExt.Rows.Lookup(["email"], [email]);
+  
+  if(data && data > 0){
+   //update row
+      var fieldsToUpdate = {
+      ContactKey : contactKey,
+      first_name : first_name,
+      balance_points : balance_points,
+      membership_tier : membership_tier,
+      Status : status
+    };
+
+    var result = dataExt.Rows.Update(
+      fieldsToUpdate,
+      ["email"],
+      [email]
+    );
+    
+  }else{
+   //add row
+      var result = dataExt.Rows.Add({
+      email : email,    
+      ContactKey : contactKey,
+      first_name : first_name,
+      balance_points : balance_points,
+      membership_tier : membership_tier,
+      Status : status});
+      }
+  
+  Write(result); 
+
+</script>
+
+<!--  -->
+<!--  -->
+<!--  -->
+
+<!-- button -->
+href="%%=RedirectTo(@CTAlink)=%%" 
+
+<!-- Email -->
+%%[
+SET @memberID = [ContactKey]
+SET @firstName = [first_name]
+SET @memberTier = [membership_tier]
+SET @points = [balance_points]
+SET @pageID = "2067"
+SET @CTAlink = CloudPagesURL(@pageID, "contactkey", @memberID, "firstname", @firstName, "membertier",@memberTier, "balancepoints", @points)
+]%%
+<!-- Cloudpage -->
+%%[
+
+SET @memberid = RequestParameter('contactkey')
+SET @firstname = RequestParameter('firstname')
+SET @membertier = RequestParameter('membertier')
+SET @balancepoints = RequestParameter('balancepoints')
+
+
+]%%
+
+<script runat="server">
+     
+  var memberid = Platform.Variable.GetValue('@memberid');
+  var firstname = Platform.Variable.GetValue('@firstname');
+  var membertier = Platform.Variable.GetValue('@membertier');
+  var balancepoints = parseFloat(Platform.Variable.GetValue('@balancepoints'));
+  
+  if(balancepoints > 1000){
+   var message = "Congratulations "+ firstname + " you qualify for a VIP voucher!"
+  }else{
+   var message = "Keep shopping "+ firstname + " and get more points!"
+  };
+  
+</script>
+<p><ctrl:var name="balancepoints"/></p><br>
+<p><ctrl:var name="message"/></p>
+
+
+<!--  -->
+<!--  -->
+<!--  -->
