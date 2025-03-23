@@ -244,5 +244,79 @@ SET @balancepoints = RequestParameter('balancepoints')
 
 
 <!--  -->
+<!-- Week 2: Sample Brief Exercise 1
+Practice Assignment: CloudPage – Personalized Loyalty Rewards Status
+ -->
+
+<!-- Email -->
+%%[
+SET @memberID = [MemberID]
+SET @fName = AttributeValue("FirstName")
+SET @pageID = "2067"
+
+ IF NOT EMPTY(@fName) THEN
+   SET @firstName = PROPERCASE(TRIM(@fName))
+ ELSE
+   SET @firstName = "there"
+ ENDIF
+
+SET @CTAlink = CloudPagesURL(@pageID, "member_id", @memberID)
+]%%
+
+<!-- href="%%=RedirectTo(@CTAlink)=%%" -->
+
+<!-- Cloudpage -->
+%%[
+SET @memberid = RequestParameter('member_id')
+]%%
+<script runat="server">
+  var memberid = Platform.Variable.GetValue('@memberid');
+  var message = "No loyalty account found. Sign up today to start earning rewards!";
+  if(memberid){
+    var dataRows = Platform.Function.LookupRows('LoyaltyMembers','MemberID',memberid);
+    if(dataRows && dataRows.length > 0) {
+      var memberid = 'True';
+      for(var i=0; i<dataRows.length; i++) {
+        var firstname = (dataRows[i]["FirstName"]);
+        var lTier = (dataRows[i]["LoyaltyTier"]);
+        var points = (dataRows[i]["PointsBalance"]);
+        var message = "Welcome to our loyalty program!";
+        // Valor predeterminado
+        if (lTier == "Gold") {
+          message = "As a Gold Member, you get **exclusive early access** to our new arrivals and **priority support**! 🚀";
+        }
+        else if (lTier == "Silver") {
+          message = "As a Silver Member, enjoy **double points** on special occasions and **VIP sale previews**! 💳";
+        }
+        else if (lTier == "Bronze") {
+          message = "As a Bronze Member, you're on your way to unlocking **bigger rewards**! Earn more points to upgrade your tier! 🎯";
+        }
+      }
+    }
+  }
+  Platform.Variable.SetValue("@firstName" , firstname );
+  Platform.Variable.SetValue("@lTier" , lTier );
+  Platform.Variable.SetValue("@points" , points );
+  Platform.Variable.SetValue("@message" , message );
+  Platform.Variable.SetValue("@memberid" , memberid );
+</script>
+%%[IF @memberid == "True" THEN]%%
+<p>Welcome back, %%=v(Propercase(@firstName))=%% !🎉
+</p>
+<br>
+<p>Your current loyalty tier: %%=v(@lTier)=%%</p>
+<br>
+<p>%%=v(@message)=%%</p>
+<br>
+<p>Points Balance: %%=v(@points)=%% points
+</p>
+<br>
+%%[ELSE]%%
+<p>%%=v(@message)=%%</p>
+%%[ENDIF]%%
+
+<!--Testing:   https://mcq2jm4xdl2dtzz0jdfmk7mf8-b4.pub.sfmc-content.com/nsfv5c3qt14?member_id=933 -->
+
+<!--  -->
 <!--  -->
 <!--  -->
