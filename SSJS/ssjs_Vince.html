@@ -128,6 +128,7 @@ Platform.Response.Write(response);
 
 
 <!-- UpdateData (Cloudpage) -->
+ 
 <script runat="server">
   Platform.Load("core", "1");
   try {
@@ -319,4 +320,201 @@ SET @memberid = RequestParameter('member_id')
 
 <!--  -->
 <!--  -->
+<!-- Week 2: Sample Brief Exercise 2
+Practice Assignment: Script Activity – Handling Customer Complaints & Resolutions -->
+
+<script runat="server">
+
+  Platform.Load("core", "1");
+
+    var dataRows = Platform.Function.LookupRows('CustomerComplaintsDE',["Priority","Status"],["High", "In Progress"]);
+   if(dataRows && dataRows.length > 0) {
+        for(var i=0; i<dataRows.length; i++) {
+             Platform.Response.Write(dataRows[i]["CustomerID"] + " " + dataRows[i]["Processed"] + "<br/>");
+        }
+   }
+
+
+  Write("Hello World")
+  
+
+
+</script> 
+
+
 <!--  -->
+<script runat="server">
+
+  Platform.Load("Core", "1");
+    
+ var CustomerComplaintsDE = DataExtension.Init("CustomerComplaintsDE");
+ var ResolvedComplaintsDE = DataExtension.Init("ResolvedComplaintsDE");
+ var EscalationQueueDE = DataExtension.Init("EscalationQueueDE");
+   var filter = {Property:"Processed",SimpleOperator:"equals",Value:"False"};
+   var data = CustomerComplaintsDE.Rows.Retrieve(filter);
+  
+  for(var row in data){
+    
+    if(data[row].Priority == "High" && data[row].Status != "Resolved"){
+  Write("Is Not Resolved: " + data[row].CustomerID + "<br>");
+      
+      
+      
+EscalationQueueDE.Rows.Add({ComplaintID:data[row].ComplaintID,
+                           CustomerID:data[row].CustomerID,
+                           Email:data[row].Email,
+                           IssueCategory:data[row].IssueCategory,
+                           SubmittedDate:data[row].SubmittedDate,
+                           EscalationDate:data[row].EscalationDate});
+      
+
+}else{
+Write("Is Resolved: " + data[row].CustomerID + "<br>");
+};
+     }  
+  //Write(Stringify(data));
+</script>
+
+<!--  -->
+
+<script runat="server">
+  Platform.Load("Core", "1");
+  var CustomerComplaintsDE = DataExtension.Init("CustomerComplaintsDE");
+  var ResolvedComplaintsDE = DataExtension.Init("ResolvedComplaintsDE");
+  var EscalationQueueDE = DataExtension.Init("EscalationQueueDE");
+  
+  var filter = {
+    Property:"Processed",SimpleOperator:"equals",Value:"False"};
+  var data = CustomerComplaintsDE.Rows.Retrieve(filter);
+  for(var row in data){
+    if(data[row].Priority == "High" && data[row].Status != "Resolved"){
+      Write("Is Not Resolved: " + data[row].CustomerID + "<br>");
+      EscalationQueueDE.Rows.Add({
+        ComplaintID:data[row].ComplaintID,
+        CustomerID:data[row].CustomerID,
+        Email:data[row].Email,
+        IssueCategory:data[row].IssueCategory,
+        SubmittedDate:data[row].SubmittedDate,
+        EscalationDate:data[row].EscalationDate});
+
+    }else if(data[row].Status == "Resolved"){
+      Write("Is Resolved: " + data[row].CustomerID + "<br>");
+      ResolvedComplaintsDE.Rows.Add({
+        ComplaintID:data[row].ComplaintID,
+        CustomerID:data[row].CustomerID,
+        Email:data[row].Email,
+        IssueCategory:data[row].IssueCategory
+
+      });
+    };
+  }; //end for
+  
+  
+  //Write(Stringify(data));
+</script>
+
+<!--  -->
+<!--  -->
+<script runat="server">
+  Platform.Load("Core", "1");
+  var CustomerComplaintsDE = DataExtension.Init("CustomerComplaintsDE");
+  var ResolvedComplaintsDE = DataExtension.Init("ResolvedComplaintsDE");
+  var EscalationQueueDE = DataExtension.Init("EscalationQueueDE");
+  var filter = {
+    Property:"Processed",SimpleOperator:"equals",Value:"False"};
+  var data = CustomerComplaintsDE.Rows.Retrieve(filter);
+  for(var row in data){
+    if(data[row].Priority == "High" && data[row].Status != "Resolved"){
+      Write("Is Not Resolved: " + data[row].CustomerID + "<br>");
+      EscalationQueueDE.Rows.Add({
+        ComplaintID:data[row].ComplaintID,
+        CustomerID:data[row].CustomerID,
+        Email:data[row].Email,
+        IssueCategory:data[row].IssueCategory,
+        SubmittedDate:data[row].SubmittedDate,
+        EscalationDate:data[row].EscalationDate}
+                                );
+      CustomerComplaintsDE.Rows.Update(
+        {
+          Processed: "TRUE"}
+        , // Campos a actualizar
+        ["ComplaintID"], // Columna clave
+        [data[row].ComplaintID] // Valor de la clave
+      );
+    }
+    else if(data[row].Status == "Resolved"){
+      Write("Is Resolved: " + data[row].CustomerID + "<br>");
+      ResolvedComplaintsDE.Rows.Add({
+        ComplaintID:data[row].ComplaintID,
+        CustomerID:data[row].CustomerID,
+        Email:data[row].Email,
+        IssueCategory:data[row].IssueCategory
+      }
+                                   );
+      CustomerComplaintsDE.Rows.Update(
+        {
+          Processed: "TRUE"}
+        , // Campos a actualizar
+        ["ComplaintID"], // Columna clave
+        [data[row].ComplaintID] // Valor de la clave
+      );
+    };
+  };
+  //end for
+  //Write(Stringify(data));
+</script>
+
+<!--  -->
+<!--  -->
+<script runat="server">
+  Platform.Load("Core", "1");
+  try {
+    var CustomerComplaintsDE = DataExtension.Init("CustomerComplaintsDE");
+    var ResolvedComplaintsDE = DataExtension.Init("ResolvedComplaintsDE");
+    var EscalationQueueDE = DataExtension.Init("EscalationQueueDE");
+    var filter = {
+      Property:"Processed",SimpleOperator:"equals",Value:"False"};
+    var data = CustomerComplaintsDE.Rows.Retrieve(filter);
+    for(var row in data){
+      if(data[row].Priority == "High" && data[row].Status != "Resolved"){
+        Write("Is Not Resolved: " + data[row].CustomerID + "<br>");
+        EscalationQueueDE.Rows.Add({
+          ComplaintID:data[row].ComplaintID,
+          CustomerID:data[row].CustomerID,
+          Email:data[row].Email,
+          IssueCategory:data[row].IssueCategory,
+          SubmittedDate:data[row].SubmittedDate,
+          EscalationDate:data[row].EscalationDate}
+                                  );
+        CustomerComplaintsDE.Rows.Update(
+          {
+            Processed: "TRUE"}
+          , // Campos a actualizar
+          ["ComplaintID"], // Columna clave
+          [data[row].ComplaintID] // Valor de la clave
+        );
+      }
+      else if(data[row].Status == "Resolved"){
+        Write("Is Resolved: " + data[row].CustomerID + "<br>");
+        ResolvedComplaintsDE.Rows.Add({
+          ComplaintID:data[row].ComplaintID,
+          CustomerID:data[row].CustomerID,
+          Email:data[row].Email,
+          IssueCategory:data[row].IssueCategory
+        }
+                                     );
+        CustomerComplaintsDE.Rows.Update(
+          {
+            Processed: "TRUE"}
+          , // Campos a actualizar
+          ["ComplaintID"], // Columna clave
+          [data[row].ComplaintID] // Valor de la clave
+        );
+      };
+    };
+    //end for
+  }
+  catch (e) {
+    Write("Fatal error, your computer will be formatted in 3, 2, 1... " + Stringify(e));
+  }
+</script>

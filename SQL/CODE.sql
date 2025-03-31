@@ -125,3 +125,10 @@ WHERE CM.Email IS NOT NULL AND CA.SignUpDate IS NOT NULL GROUP BY CONCAT(CM.firs
 
 
 
+/*  */
+SELECT c.SubscriberKey, c.EventDate as [ClickDate], c.LinkName as [LinkName]
+FROM [_Click] c with (nolock)
+join [_Job] j with (nolock)
+On j.JobID = c.JobID
+WHERE j.EmailID in ('60450')
+and c.LinkName = 'Event Registration'
