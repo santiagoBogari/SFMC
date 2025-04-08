@@ -1,0 +1,30 @@
+<!-- CodePen Home
+AMPscript refactorization - background images SFMC -->
+
+%%[
+var @width, @height, @widthPt, @heightPt, @color, @url, @contentBlockID
+set @width = "600"
+set @height = "900"
+set @widthPt = multiply(@width, 0.75)
+set @heightPt = multiply(@height, 0.75)
+set @color = "#17515d"
+set @url = "https://image.s12.sfmc-content.com/lib/fe2f11727364047f701d73/m/1/406c5557-e7dc-48f0-899e-6bb71041fa39.jpg"
+set @contentBlockID = 180516
+]%%
+<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="600" style="width:100%;">
+  <tr>
+    <td align="center" background="%%=v(@url)=%%" bgcolor="%%=v(@color)=%%" height="%%=v(@height)=%%" style="background: url(%%=v(@url)=%%) right center / cover no-repeat %%=v(@color)=%%; background-position: right center; background-size: cover; background-repeat: no-repeat;" valign="top" width="%%=v(@width)=%%">
+      <!--[if gte mso 9]>
+<v:image xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style=" border: 0;display: inline-block; width: %%=v(@widthPt)=%%pt; height: %%=v(@heightPt)=%%pt;" src="%%=v(@url)=%%" />
+<v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style=" border: 0;display: inline-block;position: absolute; width: %%=v(@widthPt)=%%pt; height:%%=v(@heightPt)=%%pt;">
+<v:fill opacity="0%" color="%%=v(@color)=%%" />
+<v:textbox inset="40px,40px,40px,40px">
+<![endif]-->
+      %%=ContentBlockByID(@contentBlockID)=%%   
+      <!--[if gte mso 9]>
+</v:textbox>
+</v:rect>
+<![endif]-->
+    </td>
+  </tr>
+</table>
