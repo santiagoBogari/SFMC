@@ -28,3 +28,43 @@ set @contentBlockID = 180516
     </td>
   </tr>
 </table>
+
+
+
+<!-- keep white class -->
+  
+
+<!-- con texto blanco inline -->
+%%[
+var @width, @height, @widthPt, @heightPt, @color, @url, @contentBlockID
+set @width = "600"
+set @height = "900"
+set @widthPt = multiply(@width, 0.75)
+set @heightPt = multiply(@height, 0.75)
+set @color = "#17515d"
+set @url = "https://image.s11.sfmc-content.com/lib/fe3211717164077c701373/m/1/293f0cbc-c106-4a26-98dc-2eef40d17e33.png"
+set @contentBlockID = 309738
+]%%
+<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="600" style="width:100%;">
+  <tr>
+    <td align="center" background="%%=v(@url)=%%" bgcolor="%%=v(@color)=%%" height="%%=v(@height)=%%" style="background: url(%%=v(@url)=%%) right center / cover no-repeat %%=v(@color)=%%; background-position: right center; background-size: cover; background-repeat: no-repeat;" valign="top" width="%%=v(@width)=%%">
+      <!--[if gte mso 9]>
+<v:image xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style=" border: 0;display: inline-block; width: %%=v(@widthPt)=%%pt; height: %%=v(@heightPt)=%%pt;" src="%%=v(@url)=%%" />
+<v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style=" border: 0;display: inline-block;position: absolute; width: %%=v(@widthPt)=%%pt; height:%%=v(@heightPt)=%%pt;">
+<v:fill opacity="0%" color="%%=v(@color)=%%" />
+<v:textbox inset="40px,40px,40px,40px">
+<![endif]-->
+      <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; padding: 20px;">
+            %%=ContentBlockByID(@contentBlockID)=%%
+          </td>
+        </tr>
+      </table>
+      <!--[if gte mso 9]>
+</v:textbox>
+</v:rect>
+<![endif]-->
+    </td>
+  </tr>
+</table>
