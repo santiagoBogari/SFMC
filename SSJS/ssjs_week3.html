@@ -1,5 +1,5 @@
 
-<!-- Cats -->
+<!-- Cats Api to Cloudpage-->
 
 <script runat="server">
     Platform.Load('Core','1');
@@ -28,4 +28,44 @@
     }
   </script>
 
-  
+
+  <!-- ssjs Script to DE -->
+
+  <script runat="server">
+    Platform.Load('Core','1');
+
+    
+  try {
+    var  DE = DataExtension.Init("MC_W3");
+    var data = DE.Rows.Retrieve();
+
+    for(var record in data){
+    
+    var subkey = data[record].SubscriberKey
+        
+    var url = "https://catfact.ninja/fact";
+    var headerNames = ["Accept"];
+    var headerValues = ["application/json"];
+    
+    var response = HTTP.Get(url, headerNames, headerValues);
+    var result = Platform.Function.ParseJSON(response.Content);
+    
+    var catFact = result.fact;
+        
+    var fieldsToUpdate = {
+      CatFact : catFact
+    };
+
+    var result = DE.Rows.Update(
+      fieldsToUpdate,
+      ["SubscriberKey"],
+      [subkey]
+    );
+        
+    }
+    
+    
+  } catch(e) {
+    Write(Stringify(e));
+  }
+</script>
