@@ -1,0 +1,31 @@
+
+<!-- Cats -->
+
+<script runat="server">
+    Platform.Load('Core','1');
+  
+    var url = "https://catfact.ninja/breeds";
+    var headerNames = ["Accept"];
+    var headerValues = ["application/json"];
+  
+    try {
+      var response = HTTP.Get(url, headerNames, headerValues);
+      
+      var result = Platform.Function.ParseJSON(response.Content);
+      
+     var breeds = result.data
+      
+      for(var breed in breeds){
+      
+           Write("<b>Breed: </b>" + breeds[breed].breed + "<br>" + "Coat: " + breeds[breed].coat + "<br>" );
+      }
+      
+      //Write(Stringify(result.data))
+  
+      
+    } catch(e) {
+      Write(Stringify(e));
+    }
+  </script>
+
+  
